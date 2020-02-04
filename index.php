@@ -8,6 +8,7 @@ require 'vendor/autoload.php';
 require 'sky.class.php';
 require 'config.php';
 Flight::set('flight.views.path', dirname(__FILE__).'/views');
+header("X-TCShare-Version: 1.0.3");
 //安装
 if(!defined("ACCESS_TOKEN")||ACCESS_TOKEN==""){
     Flight::route("/-install",function(){
