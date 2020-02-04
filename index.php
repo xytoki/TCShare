@@ -33,7 +33,7 @@ if(!defined("ACCESS_TOKEN")||ACCESS_TOKEN==""){
 }
 //接受回调
 Flight::route("/-callback",function(){
-    if( defined("ACCESS_TOKEN") && !empty("ACCESS_TOKEN") ){
+    if( defined("ACCESS_TOKEN") && ACCESS_TOKEN!="" ){
         $oauthClient=new Sky(AK,SK);
         $acctk=$oauthClient->getAccessToken("code",$_GET['code']);
         if($acctk['accessToken']!==ACCESS_TOKEN){
@@ -69,6 +69,8 @@ function toArr($a){
 }
 //主程序
 Flight::route("/*",function($route){
+	if(AK==""||SK=="")
+        throw new Error("请填写API参数");
     if(empty(ACCESS_TOKEN)){
         Flight::redirect("/-install",302);
         exit;
@@ -81,7 +83,13 @@ Flight::route("/*",function($route){
     $finpath="/我的应用/".FD.APP_PATH.$path;
     //获取文件信息
     $fileInfo=$sky->getFileInfo($finpath);
+    if(isset($fileInfo['code'])&&$fileInfo['code']=="PermissionDenied"){
+      throw new Error("应用无访问<code>"."/我的应用/".FD.APP_PATH."</code>文件夹的权限，请检查应用目录是否正确填写");
+    }
     if(isset($fileInfo['code'])&&$fileInfo['code']=="FileNotFound"){
+      	if($finpath=="/我的应用/".FD.APP_PATH||$finpath=="/我的应用/".FD.APP_PATH."/"){
+        	throw new Error("请手动建立<code>"."/我的应用/".FD.APP_PATH."</code>文件夹");
+        }
         return Flight::notFound();
     }
     //有md5的，都是文件，跳走
