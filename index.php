@@ -33,7 +33,7 @@ if(!defined("ACCESS_TOKEN")||ACCESS_TOKEN==""){
 }
 //接受回调
 Flight::route("/-callback",function(){
-    if(defined("ACCESS_TOKEN")){
+    if( defined("ACCESS_TOKEN") && !empty("ACCESS_TOKEN") ){
         $oauthClient=new Sky(AK,SK);
         $acctk=$oauthClient->getAccessToken("code",$_GET['code']);
         if($acctk['accessToken']!==ACCESS_TOKEN){
