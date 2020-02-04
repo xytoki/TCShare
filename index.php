@@ -59,8 +59,10 @@ Flight::route("/-callback",function(){
     <h1>TC Install</h1>
     Please set the <code>access_token</code> below in <code>index.php</code> or environment variables.<br>
     <textarea style="width:100%"><?php echo($acctk['accessToken']);?></textarea>
+    Please renew your token again before <code><?php echo date("Y-m-d H:i:s",$acctk['expiresIn']/1000);?></code><br/>
     <?php
     echo "<pre>",print_r($acctk,true),"</pre>";
+	
 });
 
 //工具函数一个
@@ -84,7 +86,7 @@ Flight::route("/*",function($route){
     $finpath="/我的应用/".FD.APP_PATH.$path;
     //获取文件信息
     $fileInfo=$sky->getFileInfo($finpath);
-    if(isset($fileInfo['code'])&&$fileInfo['code']=="PermissionDenied"){
+    if(FD==""||isset($fileInfo['code'])&&$fileInfo['code']=="PermissionDenied"){
       throw new Error("应用无访问<code>"."/我的应用/".FD.APP_PATH."</code>文件夹的权限，请检查应用目录是否正确填写");
     }
     if(isset($fileInfo['code'])&&$fileInfo['code']=="FileNotFound"){
