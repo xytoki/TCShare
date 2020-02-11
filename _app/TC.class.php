@@ -15,8 +15,7 @@ Class TC{
             return ["unsupported"=>""];
         }
     }
-    static function abspath($path,$path2="/"){
-        $path.=$path2;
+    static function path($path){
         $path = str_replace(array('/', '\\', '//'), '/', $path);
         $parts = array_filter(explode('/', $path), 'strlen');
         $absolutes = array();
@@ -28,10 +27,13 @@ Class TC{
                 $absolutes[] = $part;
             }
         }
-        return APP_BASE_PATH.str_replace('//','/','/'.implode('/', $absolutes));
+        return URLBASE.str_replace('//','/','/'.implode('/', $absolutes));
+    }
+    static function abspath($path,$path2="/"){
+        return self::path(APP_BASE.$path.$path2);
     }
     static function viewpath($file){
-        return self::abspath("/_app/views",$file);
+        return self::path("/_app/views/".$file);
     }
     static function human_filesize($size, $precision = 1) {
 		for($i = 0; ($size / 1024) > 1; $i++, $size /= 1024) {}

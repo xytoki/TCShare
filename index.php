@@ -16,4 +16,39 @@ require _LOCAL.'/sky.class.php';
 require _LOCAL.'/TC.class.php';
 require _LOCAL.'/routes.php';
 Flight::set('flight.views.path', _LOCAL.'/views');
+function TC_add(){
+    global $TC;
+    foreach($TC['Apps'] as $app){
+        $base=$app['route'];
+        if(substr($base,-1)=="/"){
+            $base=substr($base,0,strlen($base)-1);
+        }
+        define("APP_BASE",$base);
+        Flight::route($base."/*",function() use($app,$TC){
+            define("APP_NAME",$app['name']);
+            define("APP_THEME",$app['theme']);
+            define("APP_PATH",$app['base']);
+            $hasKey=false;
+            foreach($TC['Keys'] as $k){
+                if($k['ID']==$app['key']){
+                    define("ACCESS_TOKEN",$k["ACCESS_TOKEN"]);
+                    define("FD",$k["FD"]);
+                    define("AK",$k["AK"]);
+                    define("SK",$k["SK"]);
+                    $hasKey=true;
+                    break;
+                }
+            }
+            if(!$hasKey){
+                throw new Error("请正确配置Key");
+            }
+            $urlbase=Flight::request()->base;
+            if($urlbase=="/")$urlbase="";
+            define("URLBASE",$urlbase);
+            return true;
+        });
+        TC_MainRoute($base);
+    }
+}
+TC_add();
 Flight::start();

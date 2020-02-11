@@ -109,9 +109,6 @@ function TC_MainRoute($base=""){
         $list=$sky->listFiles($fileInfo['id'])['fileList'];
         //渲染
         
-        $base=Flight::request()->base;
-        if($base=="/")$base="";
-        define("APP_BASE_PATH",$base);
         if(substr($path,-1)!="/")$path=$path."/";
         Flight::render(APP_THEME."/list",[
             "path"=>$path,
