@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c28fc6405b89b6046577437854c984bc",
+    "content-hash": "081bf8259356a8096f9ee33c04f8b200",
     "packages": [
         {
             "name": "mikecao/flight",
@@ -165,23 +165,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/xytoki/scf-flight.git",
-                "reference": "7514e713950565303991e47c9ad429a809ff3bbc"
+                "reference": "0ad25517a3cacdd597e7a8899b7ff97517fa79ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xytoki/scf-flight/zipball/7514e713950565303991e47c9ad429a809ff3bbc",
-                "reference": "7514e713950565303991e47c9ad429a809ff3bbc",
+                "url": "https://api.github.com/repos/xytoki/scf-flight/zipball/0ad25517a3cacdd597e7a8899b7ff97517fa79ee",
+                "reference": "0ad25517a3cacdd597e7a8899b7ff97517fa79ee",
                 "shasum": ""
             },
             "require": {
-                "mikecao/flight": "^1.3",
                 "ralouphie/mimey": "^2.1",
                 "riverline/multipart-parser": "^2.0"
             },
             "type": "library",
             "autoload": {
                 "files": [
-                    "src/loader.php"
+                    "src/scf.php"
                 ]
             },
             "license": [
@@ -198,7 +197,7 @@
                 "source": "https://github.com/xytoki/scf-flight/tree/master",
                 "issues": "https://github.com/xytoki/scf-flight/issues"
             },
-            "time": "2019-10-10T05:28:51+00:00"
+            "time": "2020-02-11T10:51:29+00:00"
         }
     ],
     "packages-dev": [],

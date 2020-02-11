@@ -9,6 +9,7 @@
         }
     ],
     "require": {
-        "xytoki/scf-flight": "dev-master"
+        "xytoki/scf-flight": "dev-master",
+		"mikecao/flight": "^1.3"
     }
 }
