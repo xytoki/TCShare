@@ -47,15 +47,13 @@ function TC_add(){
         TC_MainRoute($base);
     }
 }
-switch (TC_RUNAS) {
-    case 'scf':
-        function main_handler($event, $context){
-            TC_add();
-            return Flight::start($event, $context, dirname(__FILE__));
-        }
-    break;
-    default:
+if(isset($_ENV['TENCENTCLOUD_RUNENV'])){
+    /* Environment is Tencent SCF */
+    function main_handler($event, $context){
         TC_add();
-        Flight::start();
+        return Flight::start($event, $context, dirname(__FILE__));
+    }
+}else{
+    TC_add();
+    Flight::start();
 }
-    
