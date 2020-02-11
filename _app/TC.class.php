@@ -4,13 +4,17 @@
  * @author xyToki
  */
 Class TC{
+    static function get($k){
+        global $RUN;
+        return isset($RUN['app'][$k])?$RUN['app'][$k]:$RUN[$k];
+    }
     static function toArr($a){
         if(!is_array($a)||isset($a['id']))$a=[$a];
         return $a;
     }
     static function get_preview_ext(){
         try{
-            return include("views/".APP_THEME."/config.php");
+            return json_decode(file_get_contents(_LOCAL."/views/".self::get('theme')."/config.json"),true);
         }catch(Throwable $e){
             return ["unsupported"=>""];
         }
@@ -27,10 +31,10 @@ Class TC{
                 $absolutes[] = $part;
             }
         }
-        return URLBASE.str_replace('//','/','/'.implode('/', $absolutes));
+        return self::get('URLBASE').str_replace('//','/','/'.implode('/', $absolutes));
     }
     static function abspath($path,$path2="/"){
-        return self::path(APP_BASE.$path.$path2);
+        return self::path(self::get('route').$path.$path2);
     }
     static function viewpath($file){
         return self::path("/_app/views/".$file);
@@ -50,8 +54,8 @@ Class TC{
         <?php
 	}
 	static function layout($vars=[],$callback=false){
-	    Flight::render(APP_THEME."/layout",array_merge($vars,[
-	        "callback"=>$callback   
+	    Flight::render(self::get('theme')."/layout",array_merge($vars,[
+	        "callback"=>$callback
 	    ]));
 	}
 

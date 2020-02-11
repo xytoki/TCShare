@@ -7,7 +7,7 @@
 use Firebase\JWT\JWT;
 define("_LOCAL",dirname(__FILE__)."/_app");
 ini_set("display_errors",1);
-error_reporting(E_ALL ^ E_NOTICE);
+error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 date_default_timezone_set('PRC');
 header("X-TCShare-Version: 2.0.0");
 require 'config.php';
@@ -15,8 +15,8 @@ require _LOCAL.'/vendor/autoload.php';
 require _LOCAL.'/sky.class.php';
 require _LOCAL.'/TC.class.php';
 require _LOCAL.'/routes.php';
-Flight::set('flight.views.path', _LOCAL.'/views');
 function TC_add(){
+    Flight::set('flight.views.path', _LOCAL.'/views');
     global $TC;
     foreach($TC['Apps'] as $app){
         $base=$app['route'];
@@ -25,16 +25,12 @@ function TC_add(){
         }
         define("APP_BASE",$base);
         Flight::route($base."/*",function() use($app,$TC){
-            define("APP_NAME",$app['name']);
-            define("APP_THEME",$app['theme']);
-            define("APP_PATH",$app['base']);
+            global $RUN;
+            $RUN['app']=$app;
             $hasKey=false;
             foreach($TC['Keys'] as $k){
                 if($k['ID']==$app['key']){
-                    define("ACCESS_TOKEN",$k["ACCESS_TOKEN"]);
-                    define("FD",$k["FD"]);
-                    define("AK",$k["AK"]);
-                    define("SK",$k["SK"]);
+                    $RUN=array_merge($RUN,$k);
                     $hasKey=true;
                     break;
                 }
@@ -44,11 +40,22 @@ function TC_add(){
             }
             $urlbase=Flight::request()->base;
             if($urlbase=="/")$urlbase="";
-            define("URLBASE",$urlbase);
+            $RUN=array_merge($RUN,$k);
+            $RUN['URLBASE']=$urlbase;
             return true;
         });
         TC_MainRoute($base);
     }
 }
-TC_add();
-Flight::start();
+switch (TC_RUNAS) {
+    case 'scf':
+        function main_handler($event, $context){
+            TC_add();
+            return Flight::start($event, $context, dirname(__FILE__));
+        }
+    break;
+    default:
+        TC_add();
+        Flight::start();
+}
+    

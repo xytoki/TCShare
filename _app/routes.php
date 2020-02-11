@@ -4,10 +4,12 @@
  * @author xyToki
  */
 function TC_MainRoute($base=""){
+    global $RUN;
     /* 安装 */
-    if(!defined("ACCESS_TOKEN")||ACCESS_TOKEN==""){
+    if(!isset($RUN['ACCESS_TOKEN'])||$RUN['ACCESS_TOKEN']==""){
         Flight::route($base."/-install",function(){
-            $oauthClient=new Sky(AK,SK);
+            global $RUN;
+            $oauthClient=new Sky($RUN['AK'],$RUN['SK']);
             $url=($oauthClient->getAuthorizeURL("http://127.0.0.1/-callback?"));
             ?>
                 <h1>TC Install</h1>
@@ -18,7 +20,8 @@ function TC_MainRoute($base=""){
         });
     }else{
         Flight::route($base."/-renew",function(){
-            $oauthClient=new Sky(AK,SK);
+            global $RUN;
+            $oauthClient=new Sky($RUN['AK'],$RUN['SK']);
             $url=($oauthClient->getAuthorizeURL("http://127.0.0.1/-callback?"));
             ?>
                 <h1>TC Renew</h1>
@@ -29,10 +32,11 @@ function TC_MainRoute($base=""){
     }
     /* 授权回调 */
     Flight::route($base."/-callback",function(){
-        if( defined("ACCESS_TOKEN") && ACCESS_TOKEN!="" ){
-            $oauthClient=new Sky(AK,SK);
+        global $RUN;
+        if( isset($RUN['ACCESS_TOKEN']) && $RUN['ACCESS_TOKEN']!="" ){
+            $oauthClient=new Sky($RUN['AK'],$RUN['SK']);
             $acctk=$oauthClient->getAccessToken("code",$_GET['code']);
-            if($acctk['accessToken']!==ACCESS_TOKEN){
+            if($acctk['accessToken']!==$RUN['ACCESS_TOKEN']){
                 ?>
                 <h1>TC Renew</h1>
                 Renew faild:AccessToken not match.<br/>
@@ -48,7 +52,7 @@ function TC_MainRoute($base=""){
             }
             return;
         }
-        $oauthClient=new Sky(AK,SK);
+        $oauthClient=new Sky($RUN['AK'],$RUN['SK']);
         $acctk=$oauthClient->getAccessToken("code",$_GET['code']);
         ?>
         <h1>TC Install</h1>
@@ -61,26 +65,27 @@ function TC_MainRoute($base=""){
     });
     /* 主程序 */
     Flight::route($base."/*",function($route){
-    	if(AK==""||SK=="")
+        global $RUN;
+    	if($RUN['AK']==""||$RUN['SK']=="")
             throw new Error("请填写API参数");
-        if(empty(ACCESS_TOKEN)){
+        if(empty($RUN['ACCESS_TOKEN'])){
             Flight::redirect("/-install",302);
             exit;
         }
         //初始化sdk
-        $sky=new SkyHandle(AK,SK,ACCESS_TOKEN);
+        $sky=new SkyHandle($RUN['AK'],$RUN['SK'],$RUN['ACCESS_TOKEN']);
         //格式化path
         $path="/".urldecode(urldecode(str_replace("?".$_SERVER['QUERY_STRING'],"",$route->splat)));
         $path=str_replace("//","/",$path);
-        $finpath="/我的应用/".FD.APP_PATH.$path;
+        $finpath="/我的应用/".$RUN['FD'].$RUN['app']['base'].$path;
         //获取文件信息
         $fileInfo=$sky->getFileInfo($finpath);
-        if(FD==""||isset($fileInfo['code'])&&$fileInfo['code']=="PermissionDenied"){
-          throw new Error("应用无访问<code>"."/我的应用/".FD.APP_PATH."</code>文件夹的权限，请检查应用目录是否正确填写");
+        if($RUN['FD']==""||isset($fileInfo['code'])&&$fileInfo['code']=="PermissionDenied"){
+          throw new Error("应用无访问<code>"."/我的应用/".$RUN['FD'].$RUN['app']['base']."</code>文件夹的权限，请检查应用目录是否正确填写");
         }
         if(isset($fileInfo['code'])&&$fileInfo['code']=="FileNotFound"){
-          	if($finpath=="/我的应用/".FD.APP_PATH||$finpath=="/我的应用/".FD.APP_PATH."/"){
-            	throw new Error("请手动建立<code>"."/我的应用/".FD.APP_PATH."</code>文件夹");
+          	if($finpath=="/我的应用/".$RUN['FD'].$RUN['app']['base']||$finpath=="/我的应用/".$RUN['FD'].$RUN['app']['base']."/"){
+            	throw new Error("请手动建立<code>"."/我的应用/".$RUN['FD'].$RUN['app']['base']."</code>文件夹");
             }
             return Flight::notFound();
         }
@@ -93,7 +98,10 @@ function TC_MainRoute($base=""){
             if($_SERVER['REQUEST_METHOD']=="POST"||isset($_GET['TC_preview'])){
                 $config=TC::get_preview_ext();
                 if(isset($config[TC::ext($fileInfo['name'])])){
-                    Flight::render(APP_THEME."/".$config[TC::ext($fileInfo['name'])],$fileInfo);
+                    Flight::render(
+                        $RUN['app']['theme']."/".$config[TC::ext($fileInfo['name'])],
+                        array_merge($RUN,(array)$fileInfo)
+                    );
                     return;
                 }else{
                     var_dump($fileInfo);
@@ -110,10 +118,11 @@ function TC_MainRoute($base=""){
         //渲染
         
         if(substr($path,-1)!="/")$path=$path."/";
-        Flight::render(APP_THEME."/list",[
+        Flight::response()->header("X-TCShare-Type","List");
+        Flight::render($RUN['app']['theme']."/list",array_merge($RUN,[
             "path"=>$path,
             "folders"=>TC::toArr($list['folder']),
             "files"=>TC::toArr($list['file'])
-        ]);
+        ]));
     },true);
 }

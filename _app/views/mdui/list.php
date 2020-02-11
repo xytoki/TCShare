@@ -3,7 +3,7 @@ TC::layout(
 ["path"=>$path],
 function() use($files,$folders,$path){
     
-    function file_ico($item){
+    $file_ico=function($item){
         $ext = strtolower(pathinfo($item['name'], PATHINFO_EXTENSION));
         if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
       	    return "image";
@@ -105,7 +105,7 @@ function() use($files,$folders,$path){
 		<li class="mdui-list-item file mdui-ripple">
 			<a data-readypreview="<?php echo TC::ext($item['name']);?>" href="<?php echo TC::abspath($path,rawurlencode($item['name']));?>">
 			  <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
-				<i class="mdui-icon material-icons" data-icon='<?php echo json_encode($item['icon']);?>'><?php echo file_ico($item);?></i>
+				<i class="mdui-icon material-icons" data-icon='<?php echo json_encode($item['icon']);?>'><?php echo $file_ico($item);?></i>
 		    	<span><?php echo $item['name'] ;?></span>
 			  </div>
 			  <div class="mdui-col-sm-3 mdui-text-right"><?php echo $item['lastOpTime'];?></div>
