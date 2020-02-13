@@ -23,22 +23,6 @@
 global $TC;
 /* 多盘配置 */
 $TC=[
-    "Keys"=>[
-        [
-            "ID"=>"key1",
-            "FD"=>"",
-            "AK"=>"",
-            "SK"=>"",
-            "ACCESS_TOKEN"=>""
-        ]
-    ],
-    "Apps"=>[
-        [
-            "route"=>"/",           /* 挂载路径 */
-            "name"=>"TCShare",      /* 显示名称 */
-            "theme"=>"mdui",        /* 设置主题 */
-            "base"=>"/",            /* 起始目录 */
-            "key"=>"key1",          /* 要用的API的ID */
-        ]
-    ]
+    "Keys"=>[],
+    "Apps"=>[]
 ];
