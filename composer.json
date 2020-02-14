@@ -1,15 +1,13 @@
-{
+{   
+    "name": "xytoki/TCShare",
+    "description": "TCShare",
+    "version": "2.0.1",
+    "type": "project",
 	"config": {
         "vendor-dir": "_app/vendor"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/xytoki/scf-flight"
-        }
-    ],
     "require": {
-        "xytoki/scf-flight": "dev-master",
+        "xytoki/scf-flight": "^0.0.5",
 		"mikecao/flight": "^1.3"
     }
 }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "081bf8259356a8096f9ee33c04f8b200",
+    "content-hash": "f0361d66c98b8f1d6404526c97e2a676",
     "packages": [
         {
             "name": "mikecao/flight",
@@ -161,17 +161,23 @@
         },
         {
             "name": "xytoki/scf-flight",
-            "version": "dev-master",
+            "version": "0.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xytoki/scf-flight.git",
-                "reference": "0ad25517a3cacdd597e7a8899b7ff97517fa79ee"
+                "reference": "d8b5564db3add73b7e595e477b453f81837a4625"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xytoki/scf-flight/zipball/0ad25517a3cacdd597e7a8899b7ff97517fa79ee",
-                "reference": "0ad25517a3cacdd597e7a8899b7ff97517fa79ee",
-                "shasum": ""
+                "url": "https://api.github.com/repos/xytoki/scf-flight/zipball/d8b5564db3add73b7e595e477b453f81837a4625",
+                "reference": "d8b5564db3add73b7e595e477b453f81837a4625",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
             },
             "require": {
                 "ralouphie/mimey": "^2.1",
@@ -183,6 +189,7 @@
                     "src/scf.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -193,19 +200,13 @@
                 }
             ],
             "description": "FlightPHP Framework for Tencent SCF environment.",
-            "support": {
-                "source": "https://github.com/xytoki/scf-flight/tree/master",
-                "issues": "https://github.com/xytoki/scf-flight/issues"
-            },
-            "time": "2020-02-11T10:51:29+00:00"
+            "time": "2020-02-14T10:38:12+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "xytoki/scf-flight": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
