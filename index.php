@@ -9,7 +9,7 @@ define("_LOCAL",dirname(__FILE__)."/_app");
 ini_set("display_errors",1);
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 date_default_timezone_set('PRC');
-header("X-TCShare-Version: 2.0.0");
+define("TC_VERSION",json_decode(file_get_contents("composer.json"),true)['version']);
 require 'config.php';
 require _LOCAL.'/vendor/autoload.php';
 require _LOCAL.'/sky.class.php';
@@ -25,6 +25,8 @@ function TC_add(){
         }
         define("APP_BASE",$base);
         Flight::route($base."/*",function() use($app,$TC){
+            Flight::response()->header("X-Powered-by","TCShare@xyToki");
+            Flight::response()->header("X-TCshare-version",TC_VERSION);
             global $RUN;
             $RUN['app']=$app;
             $hasKey=false;
