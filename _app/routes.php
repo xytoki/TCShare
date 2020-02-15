@@ -72,9 +72,9 @@ function TC_MainRoute($base=""){
             //预览
             if($_SERVER['REQUEST_METHOD']=="POST"||isset($_GET['TC_preview'])){
                 $config=TC::get_preview_ext();
-                if(isset($config[$fileInfo->ext()])){
+                if(isset($config[$fileInfo->extension()])){
                     Flight::render(
-                        $RUN['app']['theme']."/".$config[$fileInfo->ext()],
+                        $RUN['app']['theme']."/".$config[$fileInfo->extension()],
                         array_merge($RUN,["file"=>$fileInfo])
                     );
                     return;
