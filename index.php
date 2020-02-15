@@ -17,7 +17,7 @@ require _LOCAL.'/lib/abstract.class.php';
 require _LOCAL.'/TC.class.php';
 require _LOCAL.'/routes.php';
 spl_autoload_register(function ($class) {
-    if(strstr($class,"xyToki\\xyShare\\Providers\\")!=0)return;
+    if(!strstr($class,"xyToki\\xyShare\\Providers\\"))return;
     require(_LOCAL."/providers/".str_replace("xyToki\\xyShare\\Providers\\","",$class).".class.php");
 });
 function TC_add(){

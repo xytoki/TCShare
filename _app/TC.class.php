@@ -19,7 +19,7 @@ Class TC{
             return ["unsupported"=>""];
         }
     }
-    static function path($path){
+    static function path($path,$withurl=true){
         $path = str_replace(array('/', '\\', '//'), '/', $path);
         $parts = array_filter(explode('/', $path), 'strlen');
         $absolutes = array();
@@ -31,7 +31,7 @@ Class TC{
                 $absolutes[] = $part;
             }
         }
-        return self::get('URLBASE').str_replace('//','/','/'.implode('/', $absolutes));
+        return ($withurl?self::get('URLBASE'):"").str_replace('//','/','/'.implode('/', $absolutes));
     }
     static function abspath($path,$path2="/"){
         return self::path(self::get('route').$path.$path2);
