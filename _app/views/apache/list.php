@@ -24,19 +24,19 @@
 					<td class="file-date-modified"></td>
 				</tr>
 			<?php endif;?>
-			<?php foreach($folders as $item): if(!$item)continue;?>
+			<?php foreach($folders as $item):?>
 					<tr>
-						<td class="file-name"><a class="icon icon-dir" href="<?php echo TC::abspath($path,$item['name']);?>"><?php echo $item['name'];?>/</a></td>
+						<td class="file-name"><a class="icon icon-dir" href="<?php echo TC::abspath($path,$item->name());?>"><?php echo $item->name();?>/</a></td>
 						<td class="file-size"> - </td>
-						<td class="file-date-modified"><?php echo $item['lastOpTime']; ?></td>
+						<td class="file-date-modified"><?php echo $item->timeModified(); ?></td>
 						<!-- <?php var_dump($item); ?> -->
 					</tr>
 			<?php endforeach;?>
-			<?php foreach($files as $item): if(!$item)continue;?>
+			<?php foreach($files as $item):?>
 					<tr>
-						<td class="file-name"><a class="icon icon-file" data-readypreview="<?php echo TC::ext($item['name']);?>" href="<?php echo TC::abspath($path,$item['name']);?>"><?php echo $item['name'];?></a></td>
-						<td class="file-size"><?php echo TC::human_filesize($item['size']);?></td>
-						<td class="file-date-modified"><?php echo $item['lastOpTime'];?></td>
+						<td class="file-name"><a class="icon icon-file" data-readypreview="<?php echo TC::ext($item->name());?>" href="<?php echo TC::abspath($path,$item->name());?>"><?php echo $item->name();?></a></td>
+						<td class="file-size"><?php echo TC::human_filesize($item->size());?></td>
+						<td class="file-date-modified"><?php echo $item->timeModified();?></td>
 						<!-- <?php var_dump($item); ?> -->
 					</tr>
 			<?php endforeach;?>
