@@ -49,6 +49,9 @@ function TC_add(){
             if($urlbase=="/")$urlbase="";
             $RUN=array_merge($RUN,$k);
             $RUN['URLBASE']=$urlbase;
+            if(!isset($RUN['provider'])){
+                $RUN['provider']="xyToki\xyShare\Providers\ctyun";
+            }
             return true;
         });
         TC_MainRoute($base);
