@@ -84,8 +84,27 @@ class ctyun implements contentProvider {
     }
 }
 class ctyunAuth implements authProvider{
-    function __construct(){
-
+    protected $sky;
+    function __construct($options){
+        $this->AK=$options['AK'];
+        $this->SK=$options['SK'];
+        $this->sky=new Sky($this->AK,$this->SK);
+    }
+    function url($callback){
+        return $this->sky->getAuthorizeURL($callback);
+    }
+    function getToken($code=""){
+        if(empty($code))$code=$_GET['code'];
+        $this->acctk=$this->sky->getAccessToken("code",$code);
+    }
+    function needRenew(){
+        return true;
+    }
+    function token(){
+        return $this->acctk['accessToken'];
+    }
+    function expires(){
+        return date("Y-m-d H:i:s",$this->acctk['expiresIn']/1000);
     }
 }
 class ctyunAbstractInfo implements abstractInfo{

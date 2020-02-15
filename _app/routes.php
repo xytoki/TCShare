@@ -3,75 +3,65 @@
  * @package TCShare
  * @author xyToki
  */
+use xyToki\xyShare\Errors\NotAuthorized;
 function TC_MainRoute($base=""){
-    global $RUN;
-    /* 安装 */
-    if(!isset($RUN['ACCESS_TOKEN'])||$RUN['ACCESS_TOKEN']==""){
-        Flight::route($base."/-install",function(){
-            global $RUN;
-            $oauthClient=new Sky($RUN['AK'],$RUN['SK']);
-            $url=($oauthClient->getAuthorizeURL("http://127.0.0.1/-callback?"));
-            ?>
-                <h1>TC Install</h1>
-                Please set a <code>access_token</code> in <code>index.php</code> or environment variables.<br>
-                <a target="_blank" href="<?php echo $url;?>">Click here to get a token</a><br><br>
-                After the redirect, replace <code>http://127.0.0.1/</code> with <script>document.write('<code>'+location.href.split("-install")[0]+'</code>');</script> to continue.
-            <?php
-        });
-    }else{
-        Flight::route($base."/-renew",function(){
-            global $RUN;
-            $oauthClient=new Sky($RUN['AK'],$RUN['SK']);
-            $url=($oauthClient->getAuthorizeURL("http://127.0.0.1/-callback?"));
-            ?>
-                <h1>TC Renew</h1>
-                <a target="_blank" href="<?php echo $url;?>">Click here to renew your token</a><br><br>
-                After the redirect, replace <code>http://127.0.0.1/</code> with <script>document.write('<code>'+location.href.split("-renew")[0]+'</code>');</script> to continue.
-            <?php
-        });
-    }
+    $cb=function(){
+        global $RUN;
+        if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
+            throw new Error("Undefined provider >".$RUN['provider']."<");
+        }
+        $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
+        $oauthClient=new $authProvider($RUN);
+        $url=($oauthClient->url("http://127.0.0.1/-callback?"));
+        ?>
+            <h1>xyShare Install</h1>
+            <a target="_blank" href="<?php echo $url;?>">Click here to authorize</a><br><br>
+            After the redirect, replace <code>http://127.0.0.1/</code> with <script>document.write('<code>'+location.href.split("-install")[0]+'</code>');</script> to continue.
+        <?php
+    };
+    Flight::route($base."/-install",$cb);
+    Flight::route($base."/-renew",$cb);
     /* 授权回调 */
     Flight::route($base."/-callback",function(){
         global $RUN;
+        if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
+            throw new Error("Undefined provider >".$RUN['provider']."<");
+        }
+        $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
+        $oauthClient=new $authProvider($RUN);
+        $oauthClient->getToken();
+
         if( isset($RUN['ACCESS_TOKEN']) && $RUN['ACCESS_TOKEN']!="" ){
-            $oauthClient=new Sky($RUN['AK'],$RUN['SK']);
-            $acctk=$oauthClient->getAccessToken("code",$_GET['code']);
-            if($acctk['accessToken']!==$RUN['ACCESS_TOKEN']){
                 ?>
-                <h1>TC Renew</h1>
-                Renew faild:AccessToken not match.<br/>
-                <?php
-        echo nl2br(print_r($acctk,true));
-            }else{
-                ?>
-                <h1>TC Renew</h1>
+                <h1>xyShare Renew</h1>
                 Renew proceeded successfully.<br/>
-                Please renew your token again before <code><?php echo date("Y-m-d H:i:s",$acctk['expiresIn']/1000);?></code><br/>
                 <?php
-                echo "<pre>",print_r($acctk,true),"</pre>";
-            }
+                if($oauthClient->needRenew()){ ?>
+                    Please renew your token MAUNALLY again before <code><?php echo $oauthClient->expires();?></code><br/>
+                <?php
+                }
+                echo "<pre>",print_r($oauthClient,true),"</pre>";
             return;
         }
-        $oauthClient=new Sky($RUN['AK'],$RUN['SK']);
-        $acctk=$oauthClient->getAccessToken("code",$_GET['code']);
         ?>
-        <h1>TC Install</h1>
+        <h1>xyShare Install</h1>
         Please set the <code>access_token</code> below in <code>index.php</code> or environment variables.<br>
-        <textarea style="width:100%"><?php echo($acctk['accessToken']);?></textarea>
-        Please renew your token again before <code><?php echo date("Y-m-d H:i:s",$acctk['expiresIn']/1000);?></code><br/>
+        <textarea style="width:100%"><?php echo($oauthClient->token());?></textarea>
+        Please renew your token again before <code><?php echo $oauthClient->expires();?></code><br/>
         <?php
-        echo "<pre>",print_r($acctk,true),"</pre>";
+        echo "<pre>",print_r($oauthClient,true),"</pre>";
     	
     });
     /* 主程序 */
-    Flight::route($base."/*",function($route){
+    Flight::route($base."/*",function($route) use($base){
         global $RUN;
-        if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
-            throw new Error("Undefined provider ".$RUN['provider']);
-        }
         //初始化sdk
         $RUN['BASE']=$RUN['app']['base'];
-        $app=new $RUN['provider']($RUN);
+        try{
+            $app=new $RUN['provider']($RUN);
+        }catch(NotAuthorized $e){
+            return Flight::redirect($base."/-install");
+        }
         //格式化path
         $path="/".urldecode(urldecode(str_replace("?".$_SERVER['QUERY_STRING'],"",$route->splat)));
         $path=str_replace("//","/",$path);
