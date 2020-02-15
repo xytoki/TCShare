@@ -66,41 +66,26 @@ function TC_MainRoute($base=""){
     /* 主程序 */
     Flight::route($base."/*",function($route){
         global $RUN;
-    	if($RUN['AK']==""||$RUN['SK']=="")
-            throw new Error("请填写API参数");
-        if(empty($RUN['ACCESS_TOKEN'])){
-            Flight::redirect("/-install",302);
-            exit;
+        if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
+            throw new Error("Undefined provider ".$RUN['provider']);
         }
         //初始化sdk
-        $sky=new SkyHandle($RUN['AK'],$RUN['SK'],$RUN['ACCESS_TOKEN']);
+        $RUN['BASE']=$RUN['app']['base'];
+        $app=new $RUN['provider']($RUN);
         //格式化path
         $path="/".urldecode(urldecode(str_replace("?".$_SERVER['QUERY_STRING'],"",$route->splat)));
         $path=str_replace("//","/",$path);
-        $finpath="/我的应用/".$RUN['FD'].$RUN['app']['base'].$path;
         //获取文件信息
-        $fileInfo=$sky->getFileInfo($finpath);
-        if($RUN['FD']==""||isset($fileInfo['code'])&&$fileInfo['code']=="PermissionDenied"){
-          throw new Error("应用无访问<code>"."/我的应用/".$RUN['FD'].$RUN['app']['base']."</code>文件夹的权限，请检查应用目录是否正确填写");
-        }
-        if(isset($fileInfo['code'])&&$fileInfo['code']=="FileNotFound"){
-          	if($finpath=="/我的应用/".$RUN['FD'].$RUN['app']['base']||$finpath=="/我的应用/".$RUN['FD'].$RUN['app']['base']."/"){
-            	throw new Error("请手动建立<code>"."/我的应用/".$RUN['FD'].$RUN['app']['base']."</code>文件夹");
-            }
-            return Flight::notFound();
-        }
-        if(isset($fileInfo['code'])&&isset($fileInfo['message'])){
-            throw new Error("API错误: ".$fileInfo['message']);
-        }
+        $fileInfo=$app->getFileInfo($path);
         //有md5的，都是文件，跳走
-        if(!is_array($fileInfo['md5'])){
+        if(!$fileInfo->isFolder()){
             //预览
             if($_SERVER['REQUEST_METHOD']=="POST"||isset($_GET['TC_preview'])){
                 $config=TC::get_preview_ext();
-                if(isset($config[TC::ext($fileInfo['name'])])){
+                if(isset($config[$fileInfo->ext()])){
                     Flight::render(
-                        $RUN['app']['theme']."/".$config[TC::ext($fileInfo['name'])],
-                        array_merge($RUN,(array)$fileInfo)
+                        $RUN['app']['theme']."/".$config[$fileInfo->ext()],
+                        array_merge($RUN,["file"=>$fileInfo])
                     );
                     return;
                 }else{
@@ -109,20 +94,19 @@ function TC_MainRoute($base=""){
                 }
             }else{
                 //下载
-                Flight::redirect($fileInfo['fileDownloadUrl']);
+                Flight::redirect($fileInfo->url());
                 return;
             }
         }
         //列目录
-        $list=$sky->listFiles($fileInfo['id'])['fileList'];
+        list($folders,$files)=$app->listFiles($fileInfo);
         //渲染
-        
         if(substr($path,-1)!="/")$path=$path."/";
         Flight::response()->header("X-TCShare-Type","List");
         Flight::render($RUN['app']['theme']."/list",array_merge($RUN,[
             "path"=>$path,
-            "folders"=>TC::toArr($list['folder']),
-            "files"=>TC::toArr($list['file'])
+            "folders"=>$folders,
+            "files"=>$files
         ]));
     },true);
 }

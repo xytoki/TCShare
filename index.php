@@ -12,9 +12,14 @@ date_default_timezone_set('PRC');
 define("TC_VERSION",json_decode(file_get_contents("composer.json"),true)['version']);
 require 'config.php';
 require _LOCAL.'/vendor/autoload.php';
-require _LOCAL.'/sky.class.php';
+require _LOCAL.'/lib/errors.class.php';
+require _LOCAL.'/lib/abstract.class.php';
 require _LOCAL.'/TC.class.php';
 require _LOCAL.'/routes.php';
+spl_autoload_register(function ($class) {
+    if(strstr($class,"xyToki\\xyShare\\Providers\\")!=0)return;
+    require(_LOCAL."/providers/".str_replace("xyToki\\xyShare\\Providers\\","",$class).".class.php");
+});
 function TC_add(){
     Flight::set('flight.views.path', _LOCAL.'/views');
     global $TC;
