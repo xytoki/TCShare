@@ -1,7 +1,7 @@
 {   
     "name": "xytoki/TCShare",
     "description": "TCShare",
-    "version": "2.1.0",
+    "version": "2.5.0",
     "type": "project",
 	"config": {
         "vendor-dir": "_app/vendor"
