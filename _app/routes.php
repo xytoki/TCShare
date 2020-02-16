@@ -3,6 +3,7 @@
  * @package TCShare
  * @author xyToki
  */
+use xyToki\xyShare\Config;
 use xyToki\xyShare\Errors\NotAuthorized;
 function TC_MainRoute($base=""){
     $cb=function(){
@@ -22,7 +23,7 @@ function TC_MainRoute($base=""){
     Flight::route($base."/-install",$cb);
     Flight::route($base."/-renew",$cb);
     /* 授权回调 */
-    Flight::route($base."/-callback",function(){
+    Flight::route($base."/-callback",function() use($base){
         global $RUN;
         if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
             throw new Error("Undefined provider >".$RUN['provider']."<");
@@ -30,6 +31,7 @@ function TC_MainRoute($base=""){
         $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
         $oauthClient=new $authProvider($RUN);
         $oauthClient->getToken();
+        Config::write("XS_KEY_".$RUN['ID']."_ACCESS_TOKEN",$oauthClient->token());
 
         if( isset($RUN['ACCESS_TOKEN']) && $RUN['ACCESS_TOKEN']!="" ){
                 ?>
@@ -43,6 +45,8 @@ function TC_MainRoute($base=""){
                 echo "<pre>",print_r($oauthClient,true),"</pre>";
             return;
         }
+        Flight::redirect($base."/");
+        return;
         ?>
         <h1>xyShare Install</h1>
         Please set the <code>access_token</code> below in <code>index.php</code> or environment variables.<br>

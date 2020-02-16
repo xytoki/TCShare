@@ -4,7 +4,7 @@
    v1和v2版本配置文件不兼容，麻烦手动修改一下！
    配置文件依然在config.php里！
   */
-use Firebase\JWT\JWT;
+use xyToki\xyShare\Config;
 define("_LOCAL",dirname(__FILE__)."/_app");
 ini_set("display_errors",1);
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
@@ -13,6 +13,7 @@ define("TC_VERSION",json_decode(file_get_contents("composer.json"),true)['versio
 require 'config.php';
 require _LOCAL.'/vendor/autoload.php';
 require _LOCAL.'/lib/errors.class.php';
+require _LOCAL.'/lib/config.class.php';
 require _LOCAL.'/lib/abstract.class.php';
 require _LOCAL.'/TC.class.php';
 require _LOCAL.'/routes.php';
@@ -28,7 +29,6 @@ function TC_add(){
         if(substr($base,-1)=="/"){
             $base=substr($base,0,strlen($base)-1);
         }
-        define("APP_BASE",$base);
         Flight::route($base."/*",function() use($app,$TC){
             Flight::response()->header("X-Powered-by","TCShare@xyToki");
             Flight::response()->header("X-TCshare-version",TC_VERSION);
@@ -50,16 +50,20 @@ function TC_add(){
             $RUN=array_merge($RUN,$k);
             $RUN['URLBASE']=$urlbase;
             if(!isset($RUN['provider'])){
-                $RUN['provider']="xyToki\xyShare\Providers\ctyun";
+                $RUN['provider']="xyToki\\xyShare\\Providers\\ctyun";
+            }else if(!empty($RUN['provider'])&&!strstr($RUN['provider'],"\\")){
+                $RUN['provider']="xyToki\\xyShare\\Providers\\".$RUN['provider'];
             }
             return true;
         });
         TC_MainRoute($base);
     }
 }
+Config::loadFromEnv();
 TC_add();
 if(isset($_ENV['TENCENTCLOUD_RUNENV'])){
     /* Environment is Tencent SCF */
+    define("XY_IS_SCF",true);
     function main_handler($event, $context){
         return Flight::start($event, $context, dirname(__FILE__));
     }
