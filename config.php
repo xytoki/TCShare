@@ -19,6 +19,18 @@
          key:     此挂载使用的key ID
    每月需要访问 /挂载路径/-renew 延长token有效期，但无需再修改此文件。
    
+   你也可以在环境变量或者.env文件中配置TCShare，例如：
+    XS_KEY_ct=ctyun
+    XS_KEY_ct_FD= #YOUR FD HERE
+    XS_KEY_ct_AK= #YOUR AK HERE
+    XS_KEY_ct_SK= #YOUR SK HERE
+
+    XS_APP_1=/
+    XS_APP_1_KEY=ct
+    XS_APP_1_NAME="TCShare"
+    XS_APP_1_THEME=mdui
+    XS_APP_1_BASE=/
+
    @xyToki https://xylog.cn 2020-02-11
    https://github.com/xyToki/TCShare */
 global $TC;
