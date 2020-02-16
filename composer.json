@@ -8,6 +8,7 @@
     },
     "require": {
         "xytoki/scf-flight": "^0.0.5",
-		"mikecao/flight": "^1.3"
+		"mikecao/flight": "^1.3",
+        "tarask/onedrive": "^1.1"
     }
 }
