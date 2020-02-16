@@ -49,7 +49,7 @@ function TC_add(){
             if($urlbase=="/")$urlbase="";
             $RUN=array_merge($RUN,$k);
             $RUN['URLBASE']=$urlbase;
-            if(!isset($RUN['provider'])){
+            if(!isset($RUN['provider'])||empty($RUN['provider'])){
                 $RUN['provider']="xyToki\\xyShare\\Providers\\ctyun";
             }else if(!empty($RUN['provider'])&&!strstr($RUN['provider'],"\\")){
                 $RUN['provider']="xyToki\\xyShare\\Providers\\".$RUN['provider'];
