@@ -88,6 +88,8 @@ class ctyunAuth implements authProvider{
     function __construct($options){
         $this->AK=$options['AK'];
         $this->SK=$options['SK'];
+        $this->prevToken=$options['ACCESS_TOKEN'];
+        if(!$this->prevToken)$this->prevToken="";
         $this->sky=new Sky($this->AK,$this->SK);
     }
     function url($callback){
@@ -96,6 +98,9 @@ class ctyunAuth implements authProvider{
     function getToken($code=""){
         if(empty($code))$code=$_GET['code'];
         $this->acctk=$this->sky->getAccessToken("code",$code);
+        if($this->prevToken&&$this->prevToken!=$this->token()){
+            throw new \Error("AccessToken Mismatch");
+        }
     }
     function needRenew(){
         return true;

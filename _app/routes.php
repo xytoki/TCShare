@@ -6,6 +6,15 @@
 use xyToki\xyShare\Config;
 use xyToki\xyShare\Errors\NotAuthorized;
 function TC_MainRoute($base=""){
+    Flight::route($base."/-authurl",function(){
+        global $RUN;
+        if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
+            throw new Error("Undefined provider >".$RUN['provider']."<");
+        }
+        $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
+        $oauthClient=new $authProvider($RUN);
+        Flight::json(["url"=>$oauthClient->url($_GET['callback'])]);
+    });
     $cb=function(){
         global $RUN;
         if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
@@ -13,11 +22,9 @@ function TC_MainRoute($base=""){
         }
         $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
         $oauthClient=new $authProvider($RUN);
-        $url=($oauthClient->url("http://127.0.0.1/-callback?"));
+        Flight::render("install/ready");
         ?>
-            <h1>xyShare Install</h1>
-            <a target="_blank" href="<?php echo $url;?>">Click here to authorize</a><br><br>
-            After the redirect, replace <code>http://127.0.0.1/</code> with <script>document.write('<code>'+location.href.split("-install")[0]+'</code>');</script> to continue.
+            
         <?php
     };
     Flight::route($base."/-install",$cb);
@@ -31,8 +38,7 @@ function TC_MainRoute($base=""){
         $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
         $oauthClient=new $authProvider($RUN);
         $oauthClient->getToken();
-        Config::write("XS_KEY_".$RUN['ID']."_ACCESS_TOKEN",$oauthClient->token());
-
+        $res=Config::write("XS_KEY_".$RUN['ID']."_ACCESS_TOKEN",$oauthClient->token());
         if( isset($RUN['ACCESS_TOKEN']) && $RUN['ACCESS_TOKEN']!="" ){
                 ?>
                 <h1>xyShare Renew</h1>
@@ -45,15 +51,17 @@ function TC_MainRoute($base=""){
                 echo "<pre>",print_r($oauthClient,true),"</pre>";
             return;
         }
-        Flight::redirect($base."/");
-        return;
+        
+        if($res){
+            Flight::redirect($base."/");
+            return;
+        }
         ?>
         <h1>xyShare Install</h1>
-        Please set the <code>access_token</code> below in <code>index.php</code> or environment variables.<br>
+        Please set  <code><?php echo "XS_KEY_".$RUN['ID']."_ACCESS_TOKEN" ?></code> below in environment variables.<br>
         <textarea style="width:100%"><?php echo($oauthClient->token());?></textarea>
         Please renew your token again before <code><?php echo $oauthClient->expires();?></code><br/>
         <?php
-        echo "<pre>",print_r($oauthClient,true),"</pre>";
     	
     });
     /* 主程序 */

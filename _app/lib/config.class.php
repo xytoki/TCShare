@@ -86,7 +86,7 @@ class Config{
     }
     static function write($key,$value){
         if(defined('XY_IS_SCF')){
-
+            return false;
         }else{
             return self::saveToEnvFile($key,$value);
         }
