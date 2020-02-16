@@ -9,10 +9,10 @@
 <body>
     <h1>xyShare Install</h1>
     <div id="load">Please wait.....</div>
-    <a id="link" href="javascript:">Click here to authorize</a><br><br>
+    <a id="link" style="display:none" href="javascript:">Click here to authorize</a><br><br>
         <script>
-            var base=location.href.split("-")[0];
-            fly.get(base+"-authurl",{callback:base+"-callback?"}).then(function(e){
+            var base=location.href.split("/-")[0];
+            fly.get(base+"/-authurl",{callback:base+"/-callback?"}).then(function(e){
                 document.getElementById("load").style.display="none";
                 var a=document.getElementById("link");
                 a.href=e.data.url;
