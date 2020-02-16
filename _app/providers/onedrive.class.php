@@ -41,7 +41,7 @@ class onedriveAuth implements authProvider{
         $this->token = $this->client->fetchAccessTokenWithAuthCode($_GET['code']);
     }
     function token(){
-        return json_encode($this->token);
+        return $this->token['access_token'];
     }
     function needRenew(){
         return false;
