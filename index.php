@@ -58,6 +58,15 @@ function TC_add(){
         });
         TC_MainRoute($base);
     }
+    Flight::map("notFound",function(){
+        global $RUN;
+        try{
+            Flight::render($RUN['app']['theme']."/404");
+        }catch(Throwable $e){
+            Flight::render("404");
+            return;
+        }
+    });
 }
 Config::loadFromEnv();
 TC_add();

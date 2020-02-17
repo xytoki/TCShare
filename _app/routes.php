@@ -4,6 +4,7 @@
  * @author xyToki
  */
 use xyToki\xyShare\Config;
+use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NotAuthorized;
 function TC_MainRoute($base=""){
     Flight::route($base."/-authurl",function(){
@@ -82,7 +83,12 @@ function TC_MainRoute($base=""){
         $path="/".urldecode(urldecode(str_replace("?".$_SERVER['QUERY_STRING'],"",$route->splat)));
         $path=str_replace("//","/",$path);
         //获取文件信息
-        $fileInfo=$app->getFileInfo($path);
+        try{
+            $fileInfo=$app->getFileInfo($path);
+        }catch(NotFound $e){
+            return true;
+            //Go to next disk until really 404.
+        }
         //有md5的，都是文件，跳走
         if(!$fileInfo->isFolder()){
             //预览
