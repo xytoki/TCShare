@@ -1,3 +1,5 @@
 {
-    "mp4":"preview_video"
+    "mp4":"preview_video",
+    "webm":"preview_video",
+    "mkv":"preview_video"
 }
