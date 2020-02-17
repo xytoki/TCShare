@@ -17,6 +17,7 @@ class Config{
         }
         list($keys,$apps)=self::parseEnv();
         global $TC;
+        if(count($TC['Keys'])>0&&!defined('XY_USE_CONFPHP'))define("XY_USE_CONFPHP",true);
         $TC['Keys']=array_merge($TC['Keys'],$keys);
         $TC['Apps']=array_merge($TC['Apps'],$apps);
     }
@@ -85,7 +86,10 @@ class Config{
         return file_put_contents($envfile,$envcontent);
     }
     static function write($key,$value){
+        global $TC;
         if(defined('XY_IS_SCF')){
+            return false;
+        }else if(defined('XY_USE_CONFPHP')){
             return false;
         }else{
             return self::saveToEnvFile($key,$value);

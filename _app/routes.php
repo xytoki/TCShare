@@ -58,7 +58,11 @@ function TC_MainRoute($base=""){
         }
         ?>
         <h1>xyShare Install</h1>
-        Please set  <code><?php echo "XS_KEY_".$RUN['ID']."_ACCESS_TOKEN" ?></code> below in environment variables.<br>
+        <?php if(defined('XY_USE_CONFPHP')){ ?>
+            Please set <code>ACCESS_TOKEN</code> below in <code>config.php</code>
+        <?php }else{ ?>
+            Please set  <code><?php echo "XS_KEY_".$RUN['ID']."_ACCESS_TOKEN" ?></code> below in environment variables.<br>
+        <?php } ?>
         <textarea style="width:100%"><?php echo($oauthClient->token());?></textarea>
         Please renew your token again before <code><?php echo $oauthClient->expires();?></code><br/>
         <?php
