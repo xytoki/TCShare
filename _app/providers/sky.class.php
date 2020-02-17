@@ -33,14 +33,14 @@ class Sky {
      *
      * 用户授权认证URL
      */
-    function authorizeURL()    { return 'http://cloud.189.cn/open/oauth2/authorize.action'; }
+    function authorizeURL()    { return 'https://cloud.189.cn/open/oauth2/authorize.action'; }
 
     /**
      *
      * 获取 OAuth2 access token 的URL
      *
      */
-    function accessTokenURL()  { return 'http://cloud.189.cn/open/oauth2/accessToken.action'; }
+    function accessTokenURL()  { return 'https://cloud.189.cn/open/oauth2/accessToken.action'; }
 
     /**
      * authorize接口
@@ -97,12 +97,23 @@ class Sky {
             throw new OAuthException("wrong auth type");
         }
         $url=$this->accessTokenURL(). "?" . http_build_query($params);
-        $response =file_get_contents($url);
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = curl_exec($ch);
+        $error=curl_error($ch);
+        curl_close($ch);
+        
+        if(!$response){
+            throw new OAuthException("Curl Error >".$error);
+        }
+        
         $token = json_decode($response, true);
         if ( is_array($token) && !isset($token['error']) ) {
             $this->access_token = $token['accessToken'];
         } else {
-            throw new OAuthException("get access token failed." . $token['error']);
+            throw new OAuthException("get access token failed." . $response);
         }
         return $token;
     }
@@ -150,7 +161,7 @@ class SkyHandle
     function getUserInfo()
     {
         $method='GET';
-        return $this->get('/getUserInfo.action',$method,$access_token);
+        return $this->get('/getUserInfo.action',$method,$this->token);
 //        print_r($arr);die;
     }
 
@@ -167,7 +178,7 @@ class SkyHandle
     {
         $method='GET';
         $data=array("folderPath"=>$path);
-        return $this->get('/getFolderInfo.action',$method,$access_token,$data);
+        return $this->get('/getFolderInfo.action',$method,$this->token,$data);
     }
 
     /**
@@ -285,14 +296,14 @@ class SkyHandle
     function uploadFile($folder_id,$file=array())
     {
         $method='GET';
-        $xml=$this->get('/getFolderInfo.action',$method,$access_token);
+        $xml=$this->get('/getFolderInfo.action',$method,$this->token);
         $parameters['folder_id']=$xml->id;
         $method='PUT';
         $parameters['filename']=urlencode($file['name']);
         $parameters['data']=file_get_contents($file['tmp_name']);
         $parameters['file_size']=$file['size'];
         $parameters['md5']=md5_file($file['tmp_name']);
-        return $this->put('/uploadFile.action',$method,$access_token,$parameters);
+        return $this->put('/uploadFile.action',$method,$this->token,$parameters);
     }
 
     /**
@@ -417,7 +428,7 @@ class SkyHandle
     function get($url,$method,$access_token,$parameters = array()) {
         $access_token=$this->token;
         $time=gmdate("D, d M Y H:i:s")." GMT";
-        $wurl = "http://api.cloud.189.cn" . $url . "?" .http_build_query($parameters);
+        $wurl = "https://api.cloud.189.cn" . $url . "?" .http_build_query($parameters);
         $stxt=urldecode(http_build_query(array(
             "AccessToken"=>$this->token,
             "Operate"=>"GET",
