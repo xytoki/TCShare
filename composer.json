@@ -1,6 +1,6 @@
 {   
-    "name": "xytoki/TCShare",
-    "description": "TCShare",
+    "name": "xytoki/tcshare",
+    "description": "Multicloud directory listing.",
     "version": "2.6.0",
     "type": "project",
 	"config": {
