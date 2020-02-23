@@ -51,6 +51,7 @@ v2.5增加了对`.env`和环境变量的支持，因此通过`config.php`配置�
  - 视频播放
  - 多盘
  - 腾讯云函数（SCF）
+ - 数据缓存（文件，memcache，redis）
 
 #### TODO
  - 其他文件类型的预览
@@ -76,6 +77,21 @@ Nginx:
 ```
 try_files $uri $uri/ /index.php$is_args$args;
 ```
+### 配置缓存  
+默认情况下，TCShare将使用文件缓存数据，您可以设置如下配置而是用memcache或Redis：
+```bash
+  XS_CACHE_MODE=memcached
+  XS_CACHE_PATH=memcached://127.0.0.1:11211
+# XS_CACHE_PATH=memcached:///tmp/memcached.sock
+# XS_CACHE_PATH=memcached://127.0.0.1:11211;memcached://127.0.0.12:11211
+# https://symfony.com/doc/current/components/cache/adapters/memcached_adapter.html
+
+  XS_CACHE_MODE=redis
+  XS_CACHE_PATH=redis://127.0.0.1:6379
+# XS_CACHE_PATH=redis:///tmp/redis.sock
+# https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html
+```
+
 ### 在腾讯云云函数(SCF)运行
 
 1. 下载程序
