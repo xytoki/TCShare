@@ -68,14 +68,23 @@ v2.5增加了对`.env`和环境变量的支持，因此通过`config.php`配置�
 
 Apache：
 ```
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
 ```
 Nginx:
 ```
 try_files $uri $uri/ /index.php$is_args$args;
+location ~ /\.env {
+    deny all;
+}
 ```
 ### 配置缓存  
 默认情况下，TCShare将使用文件缓存数据，您可以设置如下配置而是用memcache或Redis：
