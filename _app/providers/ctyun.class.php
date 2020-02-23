@@ -21,6 +21,10 @@ class ctyun implements contentProvider {
     public $FD;
     public $BASE;
     public $token;
+    public $cacheConfig = [
+        "getFileInfo"=>180,
+        "listFiles"  =>300
+    ];
     function __construct($options){
         if($options['AK']==""||$options['SK']=="")
             throw new NotConfigured();
@@ -37,6 +41,8 @@ class ctyun implements contentProvider {
         $this->FD=$options['FD'];
         $this->BASE=$options['BASE'];
         $this->token=$options['ACCESS_TOKEN'];
+        if(is_numeric($options['CACHE_INFO']))$this->cacheConfig['getFileInfo']=$options['CACHE_INFO'];
+        if(is_numeric($options['CACHE_LIST']))$this->cacheConfig['listFiles']=$options['listFiles'];
     }
     function getHandler(){
         return $this->sky;
@@ -81,6 +87,9 @@ class ctyun implements contentProvider {
             $returns[1][]=new ctyunFileInfo($one);
         }
         return $returns;
+    }
+    function getCacheKey(ctyunFolderInfo $info){
+        return $info->file['id'];
     }
 }
 class ctyunAuth implements authProvider{

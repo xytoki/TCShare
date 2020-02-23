@@ -15,6 +15,8 @@ require _LOCAL.'/vendor/autoload.php';
 require _LOCAL.'/lib/errors.class.php';
 require _LOCAL.'/lib/config.class.php';
 require _LOCAL.'/lib/abstract.class.php';
+require _LOCAL.'/lib/cache.class.php';
+require _LOCAL.'/lib/provider.class.php';
 require _LOCAL.'/TC.class.php';
 require _LOCAL.'/routes.php';
 spl_autoload_register(function ($class) {

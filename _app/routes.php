@@ -4,6 +4,7 @@
  * @author xyToki
  */
 use xyToki\xyShare\Config;
+use xyToki\xyShare\Provider;
 use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NotAuthorized;
 function TC_MainRoute($base=""){
@@ -13,20 +14,11 @@ function TC_MainRoute($base=""){
             throw new Error("Undefined provider >".$RUN['provider']."<");
         }
         $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
-        $oauthClient=new $authProvider($RUN);
+        $oauthClient=new Provider($authProvider,$RUN);
         Flight::json(["url"=>$oauthClient->url($_GET['callback'])]);
     });
     $cb=function(){
-        global $RUN;
-        if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
-            throw new Error("Undefined provider >".$RUN['provider']."<");
-        }
-        $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
-        $oauthClient=new $authProvider($RUN);
         Flight::render("install/ready");
-        ?>
-            
-        <?php
     };
     Flight::route($base."/-install",$cb);
     Flight::route($base."/-renew",$cb);
@@ -37,7 +29,7 @@ function TC_MainRoute($base=""){
             throw new Error("Undefined provider >".$RUN['provider']."<");
         }
         $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
-        $oauthClient=new $authProvider($RUN);
+        $oauthClient=new Provider($authProvider,$RUN);
         $oauthClient->getToken();
         $res=Config::write("XS_KEY_".$RUN['ID']."_ACCESS_TOKEN",$oauthClient->token());
         if( isset($RUN['ACCESS_TOKEN']) && $RUN['ACCESS_TOKEN']!="" ){
@@ -75,7 +67,7 @@ function TC_MainRoute($base=""){
         //初始化sdk
         $RUN['BASE']=$RUN['app']['base'];
         try{
-            $app=new $RUN['provider']($RUN);
+            $app=new Provider($RUN['provider'],$RUN);;
         }catch(NotAuthorized $e){
             return Flight::redirect($base."/-install");
         }
