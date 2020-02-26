@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "46c686ec44131cad63861e45f2e4d304",
+    "content-hash": "a1320362c19c5f02d9801d0e2d2f565e",
     "packages": [
         {
             "name": "mikecao/flight",
@@ -663,16 +663,16 @@
         },
         {
             "name": "xytoki/scf-flight",
-            "version": "0.0.5",
+            "version": "0.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xytoki/scf-flight.git",
-                "reference": "d8b5564db3add73b7e595e477b453f81837a4625"
+                "reference": "ed925f3795bdad908d8346665a285670b34e0a35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xytoki/scf-flight/zipball/d8b5564db3add73b7e595e477b453f81837a4625",
-                "reference": "d8b5564db3add73b7e595e477b453f81837a4625",
+                "url": "https://api.github.com/repos/xytoki/scf-flight/zipball/ed925f3795bdad908d8346665a285670b34e0a35",
+                "reference": "ed925f3795bdad908d8346665a285670b34e0a35",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -702,7 +702,7 @@
                 }
             ],
             "description": "FlightPHP Framework for Tencent SCF environment.",
-            "time": "2020-02-14T10:38:12+00:00"
+            "time": "2020-02-26T11:50:09+00:00"
         }
     ],
     "packages-dev": [],
