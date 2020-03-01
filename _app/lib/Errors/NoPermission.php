@@ -1,7 +1,8 @@
 <?php
 namespace xyToki\xyShare\Errors;
-class NoPermission implements \Throwable{
-    public function getMessage(){
-        return "无权限";
+class NoPermission extends \Exception{
+    protected $message = NULL;
+    function __construct(){
+        $this->message = "无权限";
     }
 }

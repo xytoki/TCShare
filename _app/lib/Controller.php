@@ -11,9 +11,6 @@ use xyToki\xyShare\Errors\NotAuthorized;
 class Controller{
     static function prepare($app,$base=""){
         global $TC;
-        if(substr($base,-1)=="/"){
-            $base=substr($base,0,strlen($base)-1);
-        }
         Flight::route($base."/*",function() use($app,$TC){
             Flight::response()->header("X-Powered-by","TCShare@xyToki");
             Flight::response()->header("X-TCshare-version",TC_VERSION);

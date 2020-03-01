@@ -1,7 +1,8 @@
 <?php
 namespace xyToki\xyShare\Errors;
-class NotConfigured implements \Throwable{
-    public function getMessage(){
-        return "配置不正确";
+class NotConfigured extends \Exception{
+    protected $message = NULL;
+    function __construct(){
+        $this->message = "配置不正确";
     }
 }

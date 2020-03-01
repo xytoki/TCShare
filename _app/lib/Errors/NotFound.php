@@ -1,7 +1,8 @@
 <?php
 namespace xyToki\xyShare\Errors;
-class NotFound implements \Throwable{
-    public function getMessage(){
-        return "文件不存在";
+class NotFound extends \Exception{
+    protected $message = NULL;
+    function __construct(){
+        $this->message = "文件不存在";
     }
 }

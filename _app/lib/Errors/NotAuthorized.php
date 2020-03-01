@@ -1,7 +1,8 @@
 <?php
 namespace xyToki\xyShare\Errors;
-class NotAuthorized implements \Throwable{
-    public function getMessage(){
-        return "未授权";
+class NotAuthorized extends \Exception{
+    protected $message = NULL;
+    function __construct(){
+        $this->message = "未授权";
     }
 }
