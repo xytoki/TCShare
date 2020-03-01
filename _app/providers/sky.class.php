@@ -5,11 +5,11 @@
  * Date: 2016/1/17
  * Time: 16:27
  */
-
+namespace xyToki\xyShare\Providers\Ctyun;
 /**
  * @ignore
  */
-class OAuthException extends Exception {
+class OAuthException extends \Exception {
     // pass
 }
 

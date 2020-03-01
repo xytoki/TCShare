@@ -5,20 +5,13 @@
    配置文件依然在config.php里！
   */
 use xyToki\xyShare\Config;
+use xyToki\xyShare\Controller;
 define("_LOCAL",dirname(__FILE__)."/_app");
 ini_set("display_errors",1);
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 date_default_timezone_set('PRC');
 define("TC_VERSION",json_decode(file_get_contents("composer.json"),true)['version']);
-require 'config.php';
 require _LOCAL.'/vendor/autoload.php';
-require _LOCAL.'/lib/errors.class.php';
-require _LOCAL.'/lib/config.class.php';
-require _LOCAL.'/lib/abstract.class.php';
-require _LOCAL.'/lib/cache.class.php';
-require _LOCAL.'/lib/provider.class.php';
-require _LOCAL.'/TC.class.php';
-require _LOCAL.'/routes.php';
 spl_autoload_register(function ($class) {
     if(!strstr($class,"xyToki\\xyShare\\Providers\\"))return;
     require(_LOCAL."/providers/".str_replace("xyToki\\xyShare\\Providers\\","",$class).".class.php");
@@ -26,39 +19,17 @@ spl_autoload_register(function ($class) {
 function TC_add(){
     Flight::set('flight.views.path', _LOCAL.'/views');
     global $TC;
+    $bases=[];
+    /* 初始化环境 */
     foreach($TC['Apps'] as $app){
         $base=$app['route'];
-        if(substr($base,-1)=="/"){
-            $base=substr($base,0,strlen($base)-1);
-        }
-        Flight::route($base."/*",function() use($app,$TC){
-            Flight::response()->header("X-Powered-by","TCShare@xyToki");
-            Flight::response()->header("X-TCshare-version",TC_VERSION);
-            global $RUN;
-            $RUN['app']=$app;
-            $hasKey=false;
-            foreach($TC['Keys'] as $k){
-                if($k['ID']==$app['key']){
-                    $RUN=array_merge($RUN,$k);
-                    $hasKey=true;
-                    break;
-                }
-            }
-            if(!$hasKey){
-                throw new Error("请正确配置Key");
-            }
-            $urlbase=Flight::request()->base;
-            if($urlbase=="/")$urlbase="";
-            $RUN=array_merge($RUN,$k);
-            $RUN['URLBASE']=$urlbase;
-            if(!isset($RUN['provider'])||empty($RUN['provider'])){
-                $RUN['provider']="xyToki\\xyShare\\Providers\\ctyun";
-            }else if(!empty($RUN['provider'])&&!strstr($RUN['provider'],"\\")){
-                $RUN['provider']="xyToki\\xyShare\\Providers\\".$RUN['provider'];
-            }
-            return true;
-        });
-        TC_MainRoute($base);
+        $bases[]=$base;
+        Controller::prepare($app,$base);
+    }
+    /* 主程序 */
+    foreach($bases as $base){
+        Controller::installer($base);
+        Controller::disk($base);
     }
     Flight::map("notFound",function(){
         global $RUN;

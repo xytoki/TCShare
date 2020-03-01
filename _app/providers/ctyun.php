@@ -1,8 +1,6 @@
 <?php
 namespace xyToki\xyShare\Providers;
 use \TC;
-use \Sky;
-use \SkyHandle;
 use xyToki\xyShare\abstractInfo;
 use xyToki\xyShare\authProvider;
 use xyToki\xyShare\contentProvider;
@@ -12,7 +10,8 @@ use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NoPermission;
 use xyToki\xyShare\Errors\NotAuthorized;
 use xyToki\xyShare\Errors\NotConfigured;
-require_once "sky.class.php";
+use xyToki\xyShare\Providers\Ctyun\Sky;
+use xyToki\xyShare\Providers\Ctyun\SkyHandle;
 
 class ctyun implements contentProvider {
     private $sky;

@@ -7,6 +7,16 @@
         "optimize-autoloader": true,
         "vendor-dir": "_app/vendor"
     },
+    "autoload": {
+        "psr-4": {
+            "xyToki\\xyShare\\": "./_app/lib",
+            "xyToki\\xyShare\\Providers\\":"./_app/providers"
+        },
+        "files": [
+            "./config.php",
+            "./_app/lib/TC.php"
+        ]
+    },
     "require": {
         "xytoki/scf-flight": "^0.0.6",
 		"mikecao/flight": "^1.3",
