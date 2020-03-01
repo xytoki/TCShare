@@ -52,13 +52,14 @@ v2.5增加了对`.env`和环境变量的支持，因此通过`config.php`配置�
  - 多盘
  - 腾讯云函数（SCF）
  - 数据缓存（文件，memcache，redis）
+ - 密码加密
+ - 防盗链
+ - Token鉴权
 
 #### TODO
  - 其他文件类型的预览
  - 服务器直接输出
  - header,footer,readme
- - 密码加密
- - 防盗链
 
 ### Demo
 
