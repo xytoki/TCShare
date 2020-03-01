@@ -1,8 +1,5 @@
-# TCShare v2
-支持多盘的天翼云API目录列表程序
-
-### 注意
-v2版本由于支持多盘，配置方式以v1不同，请查看config.php仔细填写。v1不再更新。
+# TCShare
+不只是天翼云API的目录列表程序
 
 ### 安装方式：
 
@@ -11,7 +8,7 @@ v2版本由于支持多盘，配置方式以v1不同，请查看config.php仔细
 1. 获取一个API，并设置环境变量(如SCF等)或填入`.env`或`.env.local`中
 2. 上传到服务器，用composer安装依赖
 3. 配置伪静态
-4. 访问`/-install`进行账号授权，获取token，填入`config.php`中
+4. 访问`/-install`进行账号授权，获取token。
 5. 记得每个月访问`/-renew`续期一次。续期的时候不需要重新填写token。
 
 若将网盘挂载到`/disk`，则授权地址会变成`/disk/-install`、`/disk/-renew`，回调地址会变成`/disk/-callback`，请注意区分。
@@ -19,8 +16,10 @@ v2版本由于支持多盘，配置方式以v1不同，请查看config.php仔细
 ##### 关于环境变量、`.env`和`config.php`  
 v2.5增加了对`.env`和环境变量的支持，因此通过`config.php`配置已被弃用（但仍然兼容）。  
 如果使用v2.5以上的版本，并未使用`config.php`配置，TCShare将自动写入获得的accesstoken，无需手动修改文件。
+##### v3版本将废弃config.php支持。
 
 ###### 环境变量配置示例
+可以放置于.env中。请一定禁止访问env文件！
 ```shell
 #   XS 是前缀
 #   | -KEY 是配置种类，可选KEY，APP，SEC
@@ -104,6 +103,7 @@ location ~ /\.env {
 
 ### 安全规则
 支持密码保护、Token鉴权、Referrer防盗链三种方式。
+该功能仅支持在环境变量中配置，不支持config.php。
 配置如下：
 ```bash
 XS_SEC_1=/dir1/* 
