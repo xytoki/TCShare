@@ -10,7 +10,8 @@
     "autoload": {
         "psr-4": {
             "xyToki\\xyShare\\": "./_app/lib",
-            "xyToki\\xyShare\\Providers\\":"./_app/providers"
+            "xyToki\\xyShare\\Providers\\":"./_app/providers",
+            "xyToki\\xyShare\\Rules\\":"./_app/rules"
         },
         "files": [
             "./config.php",

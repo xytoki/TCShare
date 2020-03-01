@@ -15,14 +15,17 @@ class Config{
             $tmpfile=dirname(_LOCAL)."/".$one;
             if(is_file($tmpfile))$dotenv->load($tmpfile);
         }
-        list($keys,$apps)=self::parseEnv();
+        list($keys,$apps,$rules)=self::parseEnv();
         global $TC;
         if(count($TC['Keys'])>0&&!defined('XY_USE_CONFPHP'))define("XY_USE_CONFPHP",true);
+        if(!$TC['Rules'])$TC['Rules']=[];
         $TC['Keys']=array_merge($TC['Keys'],$keys);
         $TC['Apps']=array_merge($TC['Apps'],$apps);
+        $TC['Rules']=array_merge($TC['Rules'],$rules);
     }
     static function parseEnv(){
         ksort($_ENV);
+        $rules=[];
         $keys=[];
         $apps=[];
         foreach($_ENV as $k=>$value){
@@ -44,9 +47,15 @@ class Config{
                 $key=strtoupper($key);
                 if($key=="")$key="provider";
                 $keys[$appid][$key]=$value;
+            }elseif($type=="SEC"){
+                $rules[$appid]=isset($rules[$appid])?$rules[$appid]:[];
+                $rules[$appid]["ID"]=$appid;
+                $key=strtolower($key);
+                if($key=="")$key="route";
+                $rules[$appid][$key]=$value;
             }
         }
-        return [$keys,$apps];
+        return [$keys,$apps,$rules];
     }
     static function saveToEnvFile($key,$value){
         $envfile=dirname(_LOCAL)."/".".env.runtime";

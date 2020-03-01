@@ -16,6 +16,9 @@ spl_autoload_register(function ($class) {
     if(!strstr($class,"xyToki\\xyShare\\Providers\\"))return;
     require(_LOCAL."/providers/".str_replace("xyToki\\xyShare\\Providers\\","",$class).".class.php");
 });
+define("XS_RULE_HALT",0);
+define("XS_RULE_PASS",1);
+define("XS_RULE_SKIP",PHP_INT_MAX);
 function TC_add(){
     Flight::set('flight.views.path', _LOCAL.'/views');
     global $TC;
@@ -26,6 +29,10 @@ function TC_add(){
         $bases[]=$base;
         Controller::prepare($app,$base);
     }
+
+    /* 访问规则 */
+    Controller::rules($TC['Rules']);
+
     /* 主程序 */
     foreach($bases as $base){
         Controller::installer($base);

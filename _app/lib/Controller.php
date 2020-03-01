@@ -5,6 +5,7 @@
  */
 namespace xyToki\xyShare;
 use Flight;
+use flight\net\Route;
 use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NotAuthorized;
 class Controller{
@@ -40,6 +41,45 @@ class Controller{
             }
             return true;
         });
+    }
+    static function rules($rules){
+        Flight::route("*",function($route) use($rules){
+            $rs=[];
+            foreach($rules as $rule){
+                $rs[]=$rule;
+            }
+            for($i=0;$i<count($rs);){
+                $ret=self::rule($rs[$i],$route->splat);
+                if($ret==XS_RULE_HALT){
+                    return;
+                }
+                if($ret==XS_RULE_SKIP){
+                    break;
+                }
+                $i+=$ret;
+            }
+            return true;
+        },true);
+    }
+    static function rule($rule,$path){
+        $pattern = $rule['route'];
+        $url = $pattern;
+        $methods = array('*');
+        if (strpos($pattern, ' ') !== false) {
+            list($method, $url) = explode(' ', trim($pattern), 2);
+            $methods = explode('|', $method);
+        }
+        $route = new Route($url, false, $methods, false);
+        $request = Flight::request();
+        if ($route !== false && $route->matchMethod($request->method) && $route->matchUrl($request->url, false)) {
+            $type=$rule['type'];
+            if(!$type)return XS_RULE_PASS;
+            if(!empty($type)&&!strstr($type,"\\")){
+                $type="xyToki\\xyShare\\Rules\\".$type;
+            }
+            return $type::check($path,$rule);
+        }
+        return XS_RULE_PASS;
     }
     static function installer($base=""){
         Flight::route($base."/-authurl",function(){
