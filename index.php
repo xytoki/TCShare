@@ -26,6 +26,9 @@ function TC_add(){
     /* 初始化环境 */
     foreach($TC['Apps'] as $app){
         $base=$app['route'];
+        if(substr($base,-1)=="/"){
+            $base=substr($base,0,strlen($base)-1);
+        }
         $bases[]=$base;
         Controller::prepare($app,$base);
     }
