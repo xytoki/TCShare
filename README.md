@@ -101,6 +101,61 @@ location ~ /\.env {
 # https://symfony.com/doc/current/components/cache/adapters/redis_adapter.html
 ```
 
+### 安全规则
+支持密码保护、Token鉴权、Referrer防盗链三种方式。
+配置如下：
+```bash
+XS_SEC_1=/dir1/* 
+# 路径规则，参照http://flightphp.com/learn/#routing
+# 例如，/dir1 会匹配/dir1 /dir1/
+# /dir1/* 匹配 /dir1 /dir1/ 和dir1之下的所有文件
+XS_SEC_1_TYPE=referrer
+# 模式
+XS_SEC_1_MODE=black
+# 如果是referrer，设置黑白名单
+XS_SEC_1_VAL=baidu.com,google.com
+# 黑白名单的域名，逗号分隔
+XS_SEC_1_EMPTY=true
+# 允许空referrer
+
+# Token鉴权，需要和密码配合使用
+# 若token正确优先级在token之后的所有规则都将被跳过
+# token不正确将继续下一条规则
+# Token计算方式见下
+XS_SEC_2=/dir2/*
+XS_SEC_2_TYPE=token
+XS_SEC_2_VAL=tcshare_demo_key #secret值
+
+# 密码保护
+XS_SEC_3=/dir2/*
+XS_SEC_3_TYPE=password
+XS_SEC_3_VAL=password123
+#      ↑
+# 此数字决定优先级，优先级高的规则将先执行。
+# 除了Token之外，其他规则返回失败时将终止程序
+# Token失败会跳到下一条规则 争取会忽略下面所有
+# 所以目前如需使用token必须在下面放置password。
+```
+#### Token计算方式
+可用于附件CDN等高级用途。
+```php
+function token($path,$secret,$exps){
+    $baseTime=1580646002;        
+    // Magic Number, 实际上是2020-02-02 20:20:02 CST, 别管我为啥这么写
+    $exptime=time()+$exps-$baseTime;
+    // 过期时间减去上面的magic number
+    $usign=substr(md5($path.$secret.$exptime),0,16);
+    // 16位MD5
+    return $usign.dechex($exptime);
+    // 16进制的过期时间
+}
+$path   = "/dir1/1.jpg?query_string=should_be_calcuated";
+    // querystring也需要计算
+$secret = "tcshare_demo_key";
+$expire = 300;
+echo $path."&_tcshare=",token($path,$secret,$expire);
+// returns /dir1/1.jpg?query_string=should_be_calcuated&_tcshare=1d435a917e04e8c824eb21
+```
 ### 在腾讯云云函数(SCF)运行
 
 1. 下载程序
