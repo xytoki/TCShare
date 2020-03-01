@@ -43,13 +43,13 @@ class Controller{
         });
     }
     static function rules($rules){
-        Flight::route("*",function($route) use($rules){
+        Flight::route("/*",function($route) use($rules){
             $rs=[];
             foreach($rules as $rule){
                 $rs[]=$rule;
             }
             for($i=0;$i<count($rs);){
-                $ret=self::rule($rs[$i],$route->splat);
+                $ret=self::rule($rs[$i],"/".$route->splat);
                 if($ret==XS_RULE_HALT){
                     return;
                 }
