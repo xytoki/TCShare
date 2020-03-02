@@ -47,7 +47,8 @@ v2.5增加了对`.env`和环境变量的支持，因此通过`config.php`配置�
 
 #### 已支持
  - 文件下载
- - 视频播放
+ - 视频播放 (mp4,webm,mkv)
+ - Office预览 (doc(x),ppt(x),xls(x),pdf)
  - 多盘
  - 腾讯云函数（SCF）
  - 数据缓存（文件，memcache，redis）
