@@ -17,8 +17,11 @@ class Config{
         }
         list($keys,$apps,$rules)=self::parseEnv();
         global $TC;
-        if(count($TC['Keys'])>0&&!defined('XY_USE_CONFPHP'))define("XY_USE_CONFPHP",true);
-        if(!$TC['Rules'])$TC['Rules']=[];
+        $TC=[
+            "Keys"=>[],
+            "Apps"=>[],
+            "Rules"=>[]
+        ];
         $TC['Keys']=array_merge($TC['Keys'],$keys);
         $TC['Apps']=array_merge($TC['Apps'],$apps);
         $TC['Rules']=array_merge($TC['Rules'],$rules);

@@ -8,15 +8,12 @@
         "vendor-dir": "_app/vendor"
     },
     "autoload": {
-        "psr-4": {
-            "xyToki\\xyShare\\": "./_app/lib",
-            "xyToki\\xyShare\\Providers\\":"./_app/providers",
-            "xyToki\\xyShare\\Rules\\":"./_app/rules"
+        "psr-0": {
+            "TC": "_app/Lib/" 
         },
-        "files": [
-            "./config.php",
-            "./_app/lib/TC.php"
-        ]
+        "psr-4": {
+            "xyToki\\xyShare\\": "_app/"
+        }
     },
     "require": {
         "xytoki/scf-flight": "^0.0.6",
