@@ -1,5 +1,12 @@
 {
     "mp4":"preview_video",
     "webm":"preview_video",
-    "mkv":"preview_video"
+    "mkv":"preview_video",
+    "ppt":"preview_office",
+    "pptx":"preview_office",
+    "doc":"preview_office",
+    "docx":"preview_office",
+    "xls":"preview_office",
+    "xlsx":"preview_office",
+    "pdf":"preview_office"
 }
