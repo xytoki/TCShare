@@ -1,5 +1,9 @@
-# TCShare
+# TCShare v2
 不只是天翼云API的目录列表程序
+[安装教程：这里](https://xylog.cn/2020/03/01/tcshare.html)
+
+#### V2不再添加新功能，V3马上来，感谢支持！
+V3将支持OneDrive（国际版和世纪互联），还将开放插件文档，可以自己编写其他网盘后端
 
 ### 安装方式：
 
@@ -49,6 +53,7 @@ v2.5增加了对`.env`和环境变量的支持，因此通过`config.php`配置�
  - 文件下载
  - 视频播放 (mp4,webm,mkv)
  - Office预览 (doc(x),ppt(x),xls(x),pdf)
+ - 图片预览 (bmp,jpg,jpeg,png,gif,webp)，使用[glightbox](https://github.com/biati-digital/glightbox)
  - 多盘
  - 腾讯云函数（SCF）
  - 数据缓存（文件，memcache，redis）
