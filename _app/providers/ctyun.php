@@ -1,8 +1,6 @@
 <?php
 namespace xyToki\xyShare\Providers;
-use \TC;
-use \Sky;
-use \SkyHandle;
+use TC;
 use xyToki\xyShare\abstractInfo;
 use xyToki\xyShare\authProvider;
 use xyToki\xyShare\contentProvider;
@@ -12,7 +10,8 @@ use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NoPermission;
 use xyToki\xyShare\Errors\NotAuthorized;
 use xyToki\xyShare\Errors\NotConfigured;
-require_once "sky.class.php";
+use xyToki\xyShare\Providers\Ctyun\Sky;
+use xyToki\xyShare\Providers\Ctyun\SkyHandle;
 
 class ctyun implements contentProvider {
     private $sky;
@@ -21,6 +20,10 @@ class ctyun implements contentProvider {
     public $FD;
     public $BASE;
     public $token;
+    public $cacheConfig = [
+        "getFileInfo"=>180,
+        "listFiles"  =>300
+    ];
     function __construct($options){
         if($options['AK']==""||$options['SK']=="")
             throw new NotConfigured();
@@ -37,6 +40,8 @@ class ctyun implements contentProvider {
         $this->FD=$options['FD'];
         $this->BASE=$options['BASE'];
         $this->token=$options['ACCESS_TOKEN'];
+        if(is_numeric($options['CACHE_INFO']))$this->cacheConfig['getFileInfo']=$options['CACHE_INFO'];
+        if(is_numeric($options['CACHE_LIST']))$this->cacheConfig['listFiles']=$options['listFiles'];
     }
     function getHandler(){
         return $this->sky;
@@ -81,6 +86,9 @@ class ctyun implements contentProvider {
             $returns[1][]=new ctyunFileInfo($one);
         }
         return $returns;
+    }
+    function getCacheKey(ctyunFolderInfo $info){
+        return $info->file['id'];
     }
 }
 class ctyunAuth implements authProvider{

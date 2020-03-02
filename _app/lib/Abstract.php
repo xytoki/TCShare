@@ -1,5 +1,5 @@
 <?php
-namespace xyToki\xyShare;
+namespace xyToki\xyShare{
 interface authProvider{
 
 };
@@ -21,4 +21,10 @@ interface fileInfo extends abstractInfo{
 }
 interface folderInfo extends abstractInfo{
     function hasIndex();
+}
+}
+namespace xyToki\xyShare\Rules{
+    interface abstractRule {
+        static function check(String $path,Array $config);
+    }
 }

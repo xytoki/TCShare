@@ -3,6 +3,7 @@
  * @package TCShare
  * @author xyToki
  */
+use xyToki\xyShare\Cache;
 Class TC{
     static function get($k){
         global $RUN;
@@ -49,7 +50,7 @@ Class TC{
 	static function readyPreview(){
 	    ?>
             <script src="https://lib.baomitu.com/jquery/3.4.1/jquery.slim.min.js"></script>
-            <script>window.TC=window.TC||{};TC.preview_exts=<?php echo json_encode(array_keys(TC::get_preview_ext()));?></script>
+            <script>window.TC=window.TC||{};TC.preview_exts=<?php echo json_encode(array_keys(self::get_preview_ext()));?></script>
             <script src="<?php echo self::viewpath("/readypreview.js");?>"></script>
         <?php
 	}
@@ -57,6 +58,15 @@ Class TC{
 	    Flight::render(self::get('theme')."/layout",array_merge($vars,[
 	        "callback"=>$callback
 	    ]));
-	}
+    }
+    static function createCachedUrl($url,$expire=120){
+        $key=md5(time().json_encode($_SERVER));
+        $cache=Cache::getInstance();
+        $item=$cache->getItem("tcshare_cached_.".$key);
+        $item->set($url);
+        $item->expiresAfter($expire);
+        $cache->save($item);
+        return $key;
+    }
 
 }

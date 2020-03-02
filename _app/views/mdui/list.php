@@ -4,7 +4,7 @@ TC::layout(
 function() use($files,$folders,$path){
     
     $file_ico=function($ext){
-        if(in_array($ext,['bmp','jpg','jpeg','png','gif'])){
+        if(in_array($ext,['bmp','jpg','jpeg','png','gif',"webp"])){
       	    return "image";
         }
         if(in_array($ext,['mp4','mkv','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf'])){
@@ -16,6 +16,7 @@ function() use($files,$folders,$path){
         return "insert_drive_file";
     }
 ?>
+<link rel="stylesheet" href="<?php echo TC::viewpath("/static/css/glightbox.min.css");?>">
 <div class="mdui-container-fluid">
 
 <!--div class="mdui-typo" style="padding: 20px;">
@@ -102,19 +103,19 @@ function() use($files,$folders,$path){
 		<?php endforeach;?>
 		<?php foreach($files as $item):?>
 		<li class="mdui-list-item file mdui-ripple">
-			<a data-readypreview="<?php echo TC::ext($item->name());?>" href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>">
+			<a data-readypreview="<?php echo TC::ext($item->name());?>" <?php echo $file_ico($item->extension())=="image"?'class="glightbox" data-gallery="tcshare"':"";?> href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>">
 			  <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
 				<i class="mdui-icon material-icons" data-thumbnail="<?php echo $item->thumbnail();?>"><?php echo $file_ico($item->extension());?></i>
 		    	<span><?php echo $item->name() ;?></span>
 			  </div>
 			  <div class="mdui-col-sm-3 mdui-text-right"><?php echo $item->timeModified();?></div>
 			  <div class="mdui-col-sm-2 mdui-text-right"><?php echo TC::human_filesize($item->size());?></div>
-			  <div class="forcedownload" >
+		  	</a>
+			<div class="forcedownload" >
 			      <a href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>">
 			          <i class="mdui-icon material-icons">file_download</i>
 			      </a>
-			  </div>
-		  	</a>
+			</div>
 		</li>
 		<?php endforeach;?>
 	</ul>
@@ -131,6 +132,7 @@ function() use($files,$folders,$path){
 <?php //endif;?>
 </div>
 <?php TC::readypreview(); ?>
+<script src="<?php echo TC::viewpath("/static/js/glightbox.min.js");?>"></script>
 <script>
 TC.askPreview=function(ext,link){
     return new Promise(function(resolve,reject){
@@ -179,6 +181,7 @@ function thumb(){
 		});
 	}
 }
+var lightbox = GLightbox();
 </script>
 <a href="javascript:thumb();" class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i class="mdui-icon material-icons">format_list_bulleted</i></a>
     <?php
