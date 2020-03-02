@@ -4,6 +4,7 @@
  * @author xyToki
  */
 namespace xyToki\xyShare;
+use TC;
 use Flight;
 use flight\net\Route;
 use xyToki\xyShare\Errors\NotFound;

@@ -1,6 +1,6 @@
 <?php
 namespace xyToki\xyShare\Providers;
-use \TC;
+use TC;
 use xyToki\xyShare\abstractInfo;
 use xyToki\xyShare\authProvider;
 use xyToki\xyShare\contentProvider;

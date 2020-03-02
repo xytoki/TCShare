@@ -49,7 +49,7 @@ Class TC{
 	static function readyPreview(){
 	    ?>
             <script src="https://lib.baomitu.com/jquery/3.4.1/jquery.slim.min.js"></script>
-            <script>window.TC=window.TC||{};TC.preview_exts=<?php echo json_encode(array_keys(TC::get_preview_ext()));?></script>
+            <script>window.TC=window.TC||{};TC.preview_exts=<?php echo json_encode(array_keys(self::get_preview_ext()));?></script>
             <script src="<?php echo self::viewpath("/readypreview.js");?>"></script>
         <?php
 	}
