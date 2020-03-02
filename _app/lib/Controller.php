@@ -10,6 +10,14 @@ use flight\net\Route;
 use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NotAuthorized;
 class Controller{
+    static function cachedUrl(){
+        Flight::route("/_app/cached/@key",function($key){
+            $res = Cache::getInstance()->getItem("tcshare_cached_.".$key);
+            if ($res->isHit()) {
+                return Flight::redirect($res->get(),302);
+            }
+        });
+    }
     static function prepare($app,$base=""){
         global $TC;
         Flight::route($base."/*",function() use($app,$TC){
@@ -163,7 +171,7 @@ class Controller{
                     if(isset($config[$fileInfo->extension()])){
                         Flight::render(
                             $RUN['app']['theme']."/".$config[$fileInfo->extension()],
-                            array_merge($RUN,["file"=>$fileInfo])
+                            array_merge($RUN,["file"=>$fileInfo,"base"=>$base,"path"->$path])
                         );
                         return;
                     }else{
@@ -172,7 +180,7 @@ class Controller{
                     }
                 }else{
                     //下载
-                    Flight::redirect($fileInfo->url());
+                    Flight::redirect($fileInfo->url(),302);
                     return;
                 }
             }

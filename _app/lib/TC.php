@@ -3,6 +3,7 @@
  * @package TCShare
  * @author xyToki
  */
+use xyToki\xyShare\Cache;
 Class TC{
     static function get($k){
         global $RUN;
@@ -57,6 +58,15 @@ Class TC{
 	    Flight::render(self::get('theme')."/layout",array_merge($vars,[
 	        "callback"=>$callback
 	    ]));
-	}
+    }
+    static function createCachedUrl($url,$expire=120){
+        $key=md5(time().json_encode($_SERVER));
+        $cache=Cache::getInstance();
+        $item=$cache->getItem("tcshare_cached_.".$key);
+        $item->set($url);
+        $item->expiresAfter($expire);
+        $cache->save($item);
+        return $key;
+    }
 
 }

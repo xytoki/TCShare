@@ -22,7 +22,9 @@ class Provider{
         }
         $key = $this->name.$this->route."/".$func."?".http_build_query($brgs);
         $key = str_replace(["/","\\"],".",$key);
-
+        if(isset($_GET['_tcshare_renew'])){
+            $this->cache->delete($key);
+        }
         return $this->cache->get($key, function (ItemInterface $item) use($key,$func,$expTime,$args) {
             $item->expiresAfter($expTime);
             \Flight::response()->header( "X-TCS-Cache".str_repeat(" ",strlen($key)), "Missed ".$key);

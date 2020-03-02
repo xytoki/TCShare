@@ -21,6 +21,7 @@ define("XS_RULE_PASS",1);
 define("XS_RULE_SKIP",PHP_INT_MAX);
 function TC_add(){
     Flight::set('flight.views.path', _LOCAL.'/views');
+    Controller::cachedUrl();
     global $TC;
     $bases=[];
     /* 初始化环境 */
