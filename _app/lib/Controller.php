@@ -128,7 +128,6 @@ class Controller{
                         Please renew your token MAUNALLY again before <code><?php echo $oauthClient->expires();?></code><br/>
                     <?php
                     }
-                    echo "<pre>",print_r($oauthClient,true),"</pre>";
                 return;
             }
             
