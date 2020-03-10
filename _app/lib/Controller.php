@@ -69,6 +69,18 @@ class Controller{
     }
     static function rule($rule,$path){
         $pattern = $rule['route'];
+        $encoded = TC::encodeURI($rule['route']);
+        if(self::urlMatch($pattern)||self::urlMatch($encoded)){
+            $type=$rule['type'];
+            if(!$type)return XS_RULE_PASS;
+            if(!empty($type)&&!strstr($type,"\\")){
+                $type="xyToki\\xyShare\\Rules\\".$type;
+            }
+            return $type::check($path,$rule);
+        }
+        return XS_RULE_PASS;
+    }
+    static function urlMatch($pattern){
         $url = $pattern;
         $methods = array('*');
         if (strpos($pattern, ' ') !== false) {
@@ -78,14 +90,9 @@ class Controller{
         $route = new Route($url, false, $methods, false);
         $request = Flight::request();
         if ($route !== false && $route->matchMethod($request->method) && $route->matchUrl($request->url, false)) {
-            $type=$rule['type'];
-            if(!$type)return XS_RULE_PASS;
-            if(!empty($type)&&!strstr($type,"\\")){
-                $type="xyToki\\xyShare\\Rules\\".$type;
-            }
-            return $type::check($path,$rule);
+            return true;
         }
-        return XS_RULE_PASS;
+        return false;
     }
     static function installer($base=""){
         Flight::route($base."/-authurl",function(){
@@ -121,7 +128,6 @@ class Controller{
                         Please renew your token MAUNALLY again before <code><?php echo $oauthClient->expires();?></code><br/>
                     <?php
                     }
-                    echo "<pre>",print_r($oauthClient,true),"</pre>";
                 return;
             }
             
