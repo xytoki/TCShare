@@ -76,7 +76,11 @@ class ctyun implements contentProvider {
         $list=$this->sky->listFiles($fileInfo->file['id'])['fileList'];
         $returns=[[],[]];
         $folders=TC::toArr($list['folder']);
+		$foldername = array_column($folders, 'name');
+		array_multisort($foldername, SORT_ASC, $folders);
         $files=TC::toArr($list['file']);
+		$filename = array_column($files, 'name');
+		array_multisort($filename, SORT_ASC, $files);
         foreach($folders as $one){
             if(!$one)continue;
             $returns[0][]=new ctyunFolderInfo($one);
