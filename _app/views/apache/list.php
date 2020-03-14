@@ -11,9 +11,9 @@
 		<h1 id="heading">Index of <?php echo urldecode($path);?></h1>
 		<table id="table">
 			<tr>
-			    <th class="file-name">Name</th>
-			    <th class="file-size">Size</th>
-			    <th class="file-date-modified">Date Modified</th>
+			    <th class="file-name"><a href="?sort=name&order=<?php echo ($sort!='name'||$order=='desc')?"asc":"desc";?>">Name</a></th>
+			    <th class="file-size"><a href="?sort=size&order=<?php echo ($sort!='size'||$order=='desc')?"asc":"desc";?>">Size</a></th>
+			    <th class="file-date-modified"><a href="?sort=timeModified&order=<?php echo ($sort!='timeModified'||$order=='desc')?"asc":"desc";?>">Date Modified</a></th>
 			</tr>
 			<?php if($path != '/'):?>
 				<tr>

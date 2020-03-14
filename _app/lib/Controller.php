@@ -192,13 +192,39 @@ class Controller{
             }
             //列目录
             list($folders,$files)=$app->listFiles($fileInfo);
+            //排序
+                $s = isset($_GET['sort'])?$_GET['sort']:"name";
+                $sortableF=["name","timeModified","timeCreated","size","ext"];
+                $sortableD=["name","timeModified","timeCreated"];
+                if(in_array($s,$sortableF)){
+                    usort($files, function($a, $b) use($s) {
+                        $x = $a->$s();
+                        $y = $b->$s();
+                        return is_numeric($x)?$x-$y:strcmp($x,$y);
+                    });
+                }
+                if(in_array($s,$sortableD)){
+                    usort($folders, function($a, $b) use($s) {
+                        $x = $a->$s();
+                        $y = $b->$s();
+                        return is_numeric($x)?$x-$y:strcmp($x,$y);
+                    });
+                }
+                $o="asc";
+                if(isset($_GET['order'])&&$_GET['order']=="desc"){
+                    $folders = array_reverse($folders);
+                    $files = array_reverse($files);
+                    $o="desc";
+                }
             //渲染
             if(substr($path,-1)!="/")$path=$path."/";
             Flight::response()->header("X-TCShare-Type","List");
             Flight::render($RUN['app']['theme']."/list",array_merge($RUN,[
                 "path"=>$path,
                 "folders"=>$folders,
-                "files"=>$files
+                "files"=>$files,
+                "sort"=>$s,
+                "order"=>$o
             ]));
         },true);
     }
