@@ -1,5 +1,6 @@
 /vendor/
 /_app/vendor/
 /_app/views/toki
+.env
 .env.local
 .env.runtime

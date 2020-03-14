@@ -1,7 +1,7 @@
 <?php   
 TC::layout(
 ["path"=>$path],
-function() use($files,$folders,$path){
+function() use($files,$folders,$path,$sort,$order){
     
     $file_ico=function($ext){
         if(in_array($ext,['bmp','jpg','jpeg','png','gif',"webp"])){
@@ -71,9 +71,19 @@ function() use($files,$folders,$path){
 <div class="mdui-row">
 	<ul class="mdui-list">
 		<li class="mdui-list-item th">
-		  <div class="mdui-col-xs-12 mdui-col-sm-7">文件 <i class="mdui-icon material-icons icon-sort" data-sort="name" data-order="downward">expand_more</i></div>
-		  <div class="mdui-col-sm-3 mdui-text-right">修改时间 <i class="mdui-icon material-icons icon-sort" data-sort="date" data-order="downward">expand_more</i></div>
-		  <div class="mdui-col-sm-2 mdui-text-right">大小 <i class="mdui-icon material-icons icon-sort" data-sort="size" data-order="downward">expand_more</i></div>
+		  	<div class="mdui-col-xs-12 mdui-col-sm-7">
+		  		<a href="?sort=name&order=<?php echo ($sort!='name'||$order=='desc')?"asc":"desc";?>">文件
+				  <i class="mdui-icon material-icons icon-sort" data-sort="name" data-order="downward"><?php echo ($sort=='name')?($order=='desc'?"expand_more":"expand_less"):"";?></i>
+				</a>
+			</div>
+		  	<div class="mdui-col-sm-3 mdui-text-right">
+			  <a href="?sort=timeModified&order=<?php echo ($sort!='timeModified'||$order=='desc')?"asc":"desc";?>">修改时间
+			 	<i class="mdui-icon material-icons icon-sort" data-sort="timeModified" data-order="downward"><?php echo ($sort=='timeModified')?($order=='desc'?"expand_more":"expand_less"):"";?></i>
+				 </a></div>
+		  	<div class="mdui-col-sm-2 mdui-text-right">
+			  <a href="?sort=size&order=<?php echo ($sort!='size'||$order=='desc')?"asc":"desc";?>">大小
+				<i class="mdui-icon material-icons icon-sort" data-sort="size" data-order="downward"><?php echo ($sort=='size')?($order=='desc'?"expand_more":"expand_less"):"";?></i>
+				</a></div>
 		  <i class="mdui-icon material-icons" style="opacity:0">file_download</i>
 		</li>
 		<?php if($path != '/'):?>
