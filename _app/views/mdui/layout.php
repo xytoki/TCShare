@@ -15,7 +15,7 @@
 	<div class="mdui-container">
 	    <div class="mdui-container-fluid">
 	    <div class="mdui-toolbar nexmoe-item">
-			<a href="/"><?php echo TC::get('name');?></a>
+			<a href="<?php echo TC::abspath("/");?>"><?php echo TC::get('name');?></a>
 			<?php 
 			$navs=explode("/",$path);
 			array_shift($navs);
