@@ -1,6 +1,7 @@
 <?php
 namespace xyToki\xyShare;
 use Symfony\Contracts\Cache\ItemInterface;
+use Flight;
 class Provider{
     public $client;
     function __construct($name,$options){
@@ -27,7 +28,8 @@ class Provider{
         }
         return $this->cache->get($key, function (ItemInterface $item) use($key,$func,$expTime,$args) {
             $item->expiresAfter($expTime);
-            \Flight::response()->header( "X-TCS-Cache".str_repeat(" ",strlen($key)), "Missed ".$key);
+            $h = defined("XY_IS_SCF")?str_repeat(" ",strlen($key)):"";
+            Flight::response()->header( "X-TCS-Cache$h", "Missed ".$key);
             return $this->direct($func,$args);
         }, 1.0);
     }
