@@ -2,11 +2,13 @@
 namespace xyToki\xyShare\Providers;
 use xyToki\xyShare\authProvider;
 use xyToki\xyShare\contentProvider;
-
+use xyToki\xyShare\Errors\NoPermission;
+use xyToki\xyShare\Errors\NotAuthorized;
+use xyToki\xyShare\Errors\NotConfigured;
 use Tsk\OneDrive\Client;
 use Tsk\OneDrive\Services\OAuth2;
 
-class CNClient extends Client{
+class OnedriveCNClient extends Client{
     const API_BASE_PATH = 'https://microsoftgraph.chinacloudapi.cn/v1.0/';
     const AUTH_URL  = 'https://login.partner.microsoftonline.cn/common/oauth2/v2.0/authorize';
     const TOKEN_URL = 'https://login.partner.microsoftonline.cn/common/oauth2/v2.0/token';
@@ -39,13 +41,16 @@ class CNClient extends Client{
 }
 
 class onedriveCN extends onedrive {
-    function __construct(){
-
+    function __construct($options){
+        $this->keyPrefix="onedriveCN";
+        $this->client = new OnedriveCNClient();
+        $this->init($options);
     }
 }
 class onedriveCNAuth extends onedriveAuth {
     function __construct($options){
-        $this->client = new CNClient();
+        $this->keyPrefix="onedriveCN";
+        $this->client = new OnedriveCNClient();
         $this->init($options);
     }
 }

@@ -22,7 +22,7 @@ class ctyun implements contentProvider {
     public $token;
     public $cacheConfig = [
         "getFileInfo"=>180,
-        "listFiles"  =>300
+        "listFiles"  =>180
     ];
     function __construct($options){
         if($options['AK']==""||$options['SK']=="")

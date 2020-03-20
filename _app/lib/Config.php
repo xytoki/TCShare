@@ -90,7 +90,7 @@ class Config{
                 $envcontent.="=";
             }
             if(strstr($one," ")){
-                $one='"'.$one.'"';
+                $one='\''.$one.'\'';
             }
             $envcontent.=$one;
             $envcontent.="\n";

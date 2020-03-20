@@ -19,7 +19,9 @@ function TC_add(){
     Controller::cachedUrl();
     global $TC;
     $bases=[];
-    /* 初始化环境 */
+    /* 访问规则 */
+    Controller::rules($TC['Rules']);
+    /* 主程序 */
     foreach($TC['Apps'] as $app){
         $base=$app['route'];
         if(substr($base,-1)=="/"){
@@ -27,16 +29,10 @@ function TC_add(){
         }
         $bases[]=$base;
         Controller::prepare($app,$base);
-    }
-
-    /* 访问规则 */
-    Controller::rules($TC['Rules']);
-
-    /* 主程序 */
-    foreach($bases as $base){
         Controller::installer($base);
         Controller::disk($base);
     }
+
     Flight::map("notFound",function(){
         global $RUN;
         try{
