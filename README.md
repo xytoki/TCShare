@@ -1,6 +1,8 @@
-# TCShare v2
+# TCShare v3
 不只是天翼云API的目录列表程序  
-现已增加支持Onedrive 国际版和世纪互联
+现已增加支持Onedrive 国际版和世纪互联  
+接下来可能还有其他？  
+【配置文件可视化编辑器绝赞咕咕咕中】  
 [安装教程：这里](https://xylog.cn/2020/03/01/tcshare.html)
 
 ### 安装方式：
@@ -12,16 +14,12 @@
 3. 配置伪静态
 4. 访问`/-install`进行账号授权，获取token。
 5. 记得每个月访问`/-renew`续期一次。续期的时候不需要重新填写token。
+6. OneDrive不需要手动续期。
 
 若将网盘挂载到`/disk`，则授权地址会变成`/disk/-install`、`/disk/-renew`，回调地址会变成`/disk/-callback`，请注意区分。
 
-##### 关于环境变量、`.env`和`config.php`  
-v2.5增加了对`.env`和环境变量的支持，因此通过`config.php`配置已被弃用（但仍然兼容）。  
-如果使用v2.5以上的版本，并未使用`config.php`配置，TCShare将自动写入获得的accesstoken，无需手动修改文件。
-##### v3版本将废弃config.php支持。
-
-###### 环境变量配置示例
-可以放置于.env中。请一定禁止访问env文件！
+##### v3版本仅支持使用.env文件或环境变量配置。
+请一定禁止访问env文件！
 ```shell
 #   XS 是前缀
 #   | -KEY 是配置种类，可选KEY，APP，SEC
@@ -75,7 +73,9 @@ v2.5增加了对`.env`和环境变量的支持，因此通过`config.php`配置�
 
 ### Demo
 
-[这里](http://env-3379049.cloud.cloudraft.cn/)
+[天翼云](https://xia.st/)  
+[OneDrive国际](https://xia.st/d/)  
+[OneDrive世纪互联](https://xia.st/c/)  
 
 ### Rewrite规则：
 
