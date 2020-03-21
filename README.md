@@ -35,12 +35,8 @@
     XS_KEY_ct_SK=     #SK
     #Onedrive配置
     XS_KEY_od=onedrive
-    XS_KEY_od_AK=     #client id
-    XS_KEY_od_SK=     #client secret
     #世纪互联配置
     XS_KEY_od=onedriveCN
-    XS_KEY_od_AK=     #client id
-    XS_KEY_od_SK=     #client secret
 
 #   这里APP后面的可以是任意值，一般就123456下去
 #          ↓
@@ -51,7 +47,14 @@
     XS_APP_1_KEY=ct         #对应上面Key的ID
 
 ```
-
+#### OneDrive特别说明
+程序已经内置了一组OneDrive的Client ID和Secret，正常情况下不需要手动设置。  
+你的授权会经过`https://tcshare-r.now.sh`中转。该网页为纯静态页面，源码位于`_app/redirect/index.html`，不会获取您的个人信息。如仍有疑虑，你可以配置自己的应用:
+```bash
+    XS_KEY_od_AK=client_id
+    XS_KEY_od_SK=client_secret
+    XS_KEY_od_FD=redirect_uri  #格式：http://domain/_app/redirect
+```
 ### 功能
 
 #### 已支持

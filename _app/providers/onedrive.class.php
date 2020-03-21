@@ -16,8 +16,10 @@ use Tsk\OneDrive\Client;
 use GuzzleHttp\Psr7\Request;
 use Symfony\Contracts\Cache\ItemInterface;
 use Tsk\OneDrive\Services\OneDriveService;
-
 class onedrive implements contentProvider {
+    public $redirectUrl = 'https://tcshare-r.now.sh/';
+    public $clientId = "be064381-a5ed-4399-970a-f9c2cd6eee99";
+    public $clientSecret = "JIpGtK?xAuQe-V-B0On-7rRnDE8CyMJ1";
     public $keyPrefix;
     public $selectParams = '$top=9999&$expand=thumbnails&select=id,name,size,@microsoft.graph.downloadUrl,lastModifiedDateTime,createdDateTime,folder,file';
     public $cacheConfig = [
@@ -30,18 +32,22 @@ class onedrive implements contentProvider {
         $this->init($options);
     }
     function init($options){
-        if($options['AK']==""||$options['SK']=="")
+        if($options['AK']==""&&$options['SK']==""){
+
+        }elseif($options['AK']==""||$options['SK']==""){
             throw new NotConfigured();
+        }else{
+            $this->clientId=$options['AK'];
+            $this->clientSecret=$options['SK'];
+            $this->redirectUrl=isset($options['redirect'])?$options['redirect']:$this->redirectUrl;
+        }
         if(empty($options['ACCESS_TOKEN'])){
             throw new NotAuthorized();
         }
-        $this->clientId=$options['AK'];
-        $this->clientSecret=$options['SK'];
         $this->refreshToken=$options['ACCESS_TOKEN'];
         $this->basePath=$options['BASE'];
         $this->client->setClientId($this->clientId);
         $this->client->setClientSecret($this->clientSecret);
-        $this->client->setRedirectUri('http://localhost/-callback');
         $this->client->setScopes([
             'offline_access',
             'files.readwrite.all'
@@ -105,28 +111,37 @@ class onedrive implements contentProvider {
 }
 class onedriveAuth implements authProvider{
     protected $client;
-    public $clientId;
-    public $clientSecret;
     public $token;
     public $keyPrefix;
+    public $redirectUrl = 'https://tcshare-r.now.sh/';
+    public $clientId = "be064381-a5ed-4399-970a-f9c2cd6eee99";
+    public $clientSecret = "JIpGtK?xAuQe-V-B0On-7rRnDE8CyMJ1";
     function __construct($options){
         $this->client = new Client();
         $this->keyPrefix="onedrive";
         $this->init($options);
     }
     function init($options){
-        $this->clientId=$options['AK'];
-        $this->clientSecret=$options['SK'];
+        if($options['AK']==""&&$options['SK']==""){
+
+        }elseif($options['AK']==""||$options['SK']==""){
+            throw new NotConfigured();
+        }else{
+            $this->clientId=$options['AK'];
+            $this->clientSecret=$options['SK'];
+            $this->redirectUrl=isset($options['redirect'])?$options['redirect']:$this->redirectUrl;
+        }
         $this->client->setClientId($this->clientId);
         $this->client->setClientSecret($this->clientSecret);
-        $this->client->setRedirectUri('http://localhost/-callback');
         $this->client->setScopes([
             'offline_access',
             'files.readwrite.all'
         ]);
+        $this->client->setRedirectUri($this->redirectUrl);
     }
-    function url(){
-        return (string)$this->client->createAuthUrl();
+    function url($callback){
+        $url = (string)$this->client->createAuthUrl();
+        return $url."&state=".urlencode($callback);
     }
     function getToken($code=""){
         if(empty($code))$code=$_GET['code'];
@@ -141,7 +156,7 @@ class onedriveAuth implements authProvider{
         $cache->save($acctkItem);
     }
     function token(){
-        return json_encode($this->token['refresh_token']);
+        return $this->token['refresh_token'];
     }
     function needRenew(){
         return false;
