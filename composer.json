@@ -1,7 +1,7 @@
 {   
     "name": "xytoki/tcshare",
     "description": "Multicloud directory listing.",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "type": "project",
 	"config": {
         "optimize-autoloader": true,
