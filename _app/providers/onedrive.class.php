@@ -129,7 +129,7 @@ class onedriveAuth implements authProvider{
         }else{
             $this->clientId=$options['AK'];
             $this->clientSecret=$options['SK'];
-            $this->redirectUrl=isset($options['redirect'])?$options['redirect']:$this->redirectUrl;
+            $this->redirectUrl=isset($options['FD'])?$options['FD']:$this->redirectUrl;
         }
         $this->client->setClientId($this->clientId);
         $this->client->setClientSecret($this->clientSecret);
