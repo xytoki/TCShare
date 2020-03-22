@@ -7,7 +7,7 @@ use xyToki\xyShare\contentProvider;
 use xyToki\xyShare\abstractInfo;
 use xyToki\xyShare\fileInfo;
 use xyToki\xyShare\folderInfo;
-use xyToki\xyShare\Errors\NoPermission;
+use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NotAuthorized;
 use xyToki\xyShare\Errors\NotConfigured;
 use TC;
@@ -15,7 +15,7 @@ use Flight;
 use Tsk\OneDrive\Client;
 use GuzzleHttp\Psr7\Request;
 use Symfony\Contracts\Cache\ItemInterface;
-use Tsk\OneDrive\Services\OneDriveService;
+use GuzzleHttp\Exception\RequestException;
 class onedrive implements contentProvider {
     public $redirectUrl = 'https://tcshare-r.now.sh/';
     public $clientId = "be064381-a5ed-4399-970a-f9c2cd6eee99";
@@ -77,7 +77,15 @@ class onedrive implements contentProvider {
         $path = $this->finpath($file);
         $uri = $this->client::API_BASE_PATH."me/drive/root".$path;
         $req = new Request('GET',$uri."?".$this->selectParams);
-        $res = $this->client->send($req);
+        try{
+            $res = $this->client->send($req);
+        }catch(RequestException $e){
+            if ( $e->hasResponse() && $e->getResponse()->getStatusCode()==404) {
+                throw new NotFound;
+            }else{
+                throw $e;
+            }
+        }
         $res['path'] = $file;
         if(isset($res['folder'])){
             return new onedriveFolderInfo((array)$res);
