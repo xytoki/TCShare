@@ -20,6 +20,6 @@ $url=TC::path(Flight::request()->base."/_app/cached/".$key,false);
         <iframe id="owa" allowfullscreen="true" src="about:blank" frameborder="0" sandbox="allow-popups allow-same-origin allow-scripts allow-forms"></iframe>
     </body>
     <script>
-        document.getElementById("owa").src="https://owa-box.vips100.com/op/view.aspx?src="+encodeURIComponent(location.origin+"<?php echo $url;?>")
+        document.getElementById("owa").src="https://view.officeapps.live.com/op/view.aspx?src="+encodeURIComponent(location.origin+"<?php echo $url;?>")
     </script>
 </html>
