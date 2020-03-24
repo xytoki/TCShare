@@ -1,7 +1,3 @@
-<?php
-$key=TC::createCachedUrl($file->url());
-$url=TC::path(Flight::request()->base."/_app/cached/".$key,false);
-?>
 <html>
     <head>
         <meta charset="utf-8">
@@ -17,9 +13,6 @@ $url=TC::path(Flight::request()->base."/_app/cached/".$key,false);
         </style>
     </head>
     <body>
-        <iframe id="owa" allowfullscreen="true" src="about:blank" frameborder="0" sandbox="allow-popups allow-same-origin allow-scripts allow-forms"></iframe>
+        <iframe id="owa" allowfullscreen="true" src="https://owa-box.vips100.com/op/view.aspx?src=<?php echo urlencode($file->url());?>" frameborder="0" sandbox="allow-popups allow-same-origin allow-scripts allow-forms"></iframe>
     </body>
-    <script>
-        document.getElementById("owa").src="https://view.officeapps.live.com/op/view.aspx?src="+encodeURIComponent(location.origin+"<?php echo $url;?>")
-    </script>
 </html>
