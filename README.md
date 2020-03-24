@@ -56,6 +56,13 @@
     XS_KEY_od_SK=client_secret
     XS_KEY_od_FD=redirect_uri  #格式：http://domain/_app/redirect
 ```
+#### SharePoint配置方式
+前期配置与onedrive相同，只需要在app配置处加上
+```bash
+    XS_APP_<id>_MODE=sharepoint
+    XS_APP_<id>_DOMAIN= #sharepoint的根域名，如：xxx.sharepoint.cn
+    XS_APP_<id>_SITE=   #sharepoint的网站名，http://xxx.sharepoint.cn/site/<name>
+```
 #### 和彩云登录方式
 1. 正常登录和彩云，记得勾选【下次自动登录】。  
 2. 打开[这个地址](https://caiyun.feixin.10086.cn/Mcloud/sso/getCyToken.action)。 

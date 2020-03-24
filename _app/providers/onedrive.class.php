@@ -21,6 +21,7 @@ class onedrive implements contentProvider {
     public $clientId = "be064381-a5ed-4399-970a-f9c2cd6eee99";
     public $clientSecret = "JIpGtK?xAuQe-V-B0On-7rRnDE8CyMJ1";
     public $keyPrefix;
+    public $rootPrefix="me/drive";
     public $selectParams = '$top=9999&$expand=thumbnails&select=id,name,size,@microsoft.graph.downloadUrl,lastModifiedDateTime,createdDateTime,folder,file';
     public $cacheConfig = [
         "getFileInfo"=>600,
@@ -52,7 +53,32 @@ class onedrive implements contentProvider {
             'offline_access',
             'files.readwrite.all'
         ]);
+        $this->options = $options;
         $this->getToken();
+        if(isset($this->options['app']['mode'])&&$this->options['app']['mode']=='sharepoint'){
+            $this->initSharepoint();
+        }
+    }
+    function initSharepoint(){
+        $key = $this->keyPrefix.".sharepoint.".md5($this->options['app']['domain'].$this->options['app']['site']);
+        $cached=1;
+        $sharepointId = Cache::getInstance()->get($key, function (ItemInterface $item) use(&$cached) {
+            $cached=0;
+            $item->expiresAfter(3500);
+            $uri = $this->client::API_BASE_PATH."sites/".$this->options['app']['domain'].":/sites/".$this->options['app']['site'];
+            $req = new Request('GET',$uri,[]);
+            try{
+                $res = $this->client->send($req);
+            }catch(RequestException $e){
+                if ( $e->hasResponse() && $e->getResponse()->getStatusCode()==404) {
+                    throw new NotFound;
+                }else{
+                    throw $e;
+                }
+            }
+            return $res['id'];
+        },1.0);
+        $this->rootPrefix = "sites/$sharepointId/drive";
     }
     function getToken(){
         $cache = Cache::getInstance();
@@ -75,7 +101,7 @@ class onedrive implements contentProvider {
     }
     function getFileInfo($file){
         $path = $this->finpath($file);
-        $uri = $this->client::API_BASE_PATH."me/drive/root".$path;
+        $uri = $this->client::API_BASE_PATH.$this->rootPrefix."/root".$path;
         $req = new Request('GET',$uri."?".$this->selectParams);
         try{
             $res = $this->client->send($req);
@@ -97,7 +123,7 @@ class onedrive implements contentProvider {
         if(!$folderInfo instanceof onedriveFolderInfo)throw new \Exception();
         $file = $folderInfo->file['path'];
         $path = $this->finpath($file,true);
-        $uri = $this->client::API_BASE_PATH."me/drive/root".$path."/children";
+        $uri = $this->client::API_BASE_PATH.$this->rootPrefix."/root".$path."/children";
         $req = new Request('GET',$uri."?".$this->selectParams);
         $res = $this->client->send($req);
         $returns=[[],[]];
@@ -114,7 +140,7 @@ class onedrive implements contentProvider {
         return $returns;
     }
     function getCacheKey(onedriveFolderInfo $info){
-        return $info->file['path'];
+        return md5($this->rootPrefix).".".$info->file['path'];
     }
 }
 class onedriveAuth implements authProvider{
