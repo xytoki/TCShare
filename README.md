@@ -1,6 +1,7 @@
 # TCShare v3
 不只是天翼云API的目录列表程序  
-现已增加支持Onedrive 国际版和世纪互联  
+现已增加支持Onedrive 国际版和世纪互联   
+又增加了和彩云  
 接下来可能还有其他？  
 【配置文件可视化编辑器绝赞咕咕咕中】  
 [安装教程：这里](https://xylog.cn/2020/03/03/tcshare.html)
@@ -55,6 +56,22 @@
     XS_KEY_od_SK=client_secret
     XS_KEY_od_FD=redirect_uri  #格式：http://domain/_app/redirect
 ```
+#### 和彩云登录方式
+1. 正常登录和彩云，记得勾选【下次自动登录】。  
+2. 打开[这个地址](https://caiyun.feixin.10086.cn/Mcloud/sso/getCyToken.action)。 
+3. 复制里面所有内容，**两边加上单引号**（重要！），填入到配置文件/环境变量的`XS_KEY_<name>_TOKEN`字段中  
+4. 理论上可用。和彩云cookie有效期理论一年，够用了。
+5. 为什么不做自动登录？因为有验证码。  
+配置示例：  
+```bash
+XS_KEY_cm=caiyun
+XS_KEY_cm_TOKEN='{"cyToken":"******|*1*|RCS|******|******","encryPhone":"******"}'
+XS_APP_3_NAME="TCShare 和彩云"
+XS_APP_3_THEME=mdui
+XS_APP_3_BASE=/
+XS_APP_3_KEY=cm
+XS_APP_3=/caiyun
+```
 ### 功能
 
 #### 已支持
@@ -77,6 +94,7 @@
 ### Demo
 
 [天翼云](https://xia.st/)  
+[和彩云](https://xia.st/caiyun/)  
 [OneDrive国际](https://xia.st/d/)  
 [OneDrive世纪互联](https://xia.st/c/)  
 
