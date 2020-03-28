@@ -160,7 +160,7 @@ class Controller{
                 return Flight::redirect($base."/-install");
             }
             //格式化path
-            $path="/".urldecode(urldecode(str_replace("?".$_SERVER['QUERY_STRING'],"",$route->splat)));
+            $path="/".rawurldecode(urldecode(str_replace("?".$_SERVER['QUERY_STRING'],"",$route->splat)));
             $path=str_replace("//","/",$path);
             //获取文件信息
             try{
@@ -169,6 +169,7 @@ class Controller{
                 return true;
                 //Go to next disk until really 404.
             }
+            if(!$fileInfo)return;
             //有md5的，都是文件，跳走
             if(!$fileInfo->isFolder()){
                 //预览
