@@ -43,14 +43,15 @@ function TC_add(){
         }
     });
 }
-Config::loadFromEnv();
-TC_add();
 if(isset($_ENV['TENCENTCLOUD_RUNENV'])){
     /* Environment is Tencent SCF */
     define("XY_IS_SCF",true);
+    TC_add();
     function main_handler($event, $context){
         return Flight::start($event, $context, dirname(__FILE__));
     }
 }else{
+    Config::loadFromEnv();
+    TC_add();
     Flight::start();
 }
