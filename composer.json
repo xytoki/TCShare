@@ -1,14 +1,18 @@
 {   
     "name": "xytoki/tcshare",
     "description": "Multicloud directory listing.",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "type": "project",
 	"config": {
         "optimize-autoloader": true,
         "vendor-dir": "_app/vendor"
     },
     "autoload": {
-        "classmap": ["_app/lib","_app/providers","_app/rules"]
+        "classmap": ["_app/lib","_app/providers","_app/rules"],
+        "psr-4": {
+            "xyToki\\xyShare\\Providers\\":"_plugins/",
+            "xyToki\\xyShare\\Rules\\":"_plugins/"
+        }
     },
     "require": {
         "xytoki/scf-flight": "^0.0.6",
