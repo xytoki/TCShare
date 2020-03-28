@@ -60,9 +60,11 @@
 前期配置与onedrive相同，只需要在app配置处加上
 ```bash
     XS_APP_<id>_MODE=sharepoint
-    XS_APP_<id>_DOMAIN= #sharepoint的根域名，如：xxx.sharepoint.cn
-    XS_APP_<id>_SITE=   #sharepoint的网站名，http://xxx.sharepoint.cn/site/<name>
+    XS_APP_<id>_SITE=
+    #sharepoint的网站名，若地址是http://xxx.sharepoint.cn/site/<name>，只要填写<name>这部分
 ```
+也就是说你可以一个key挂一个od和多个sharepoint。
+
 #### 和彩云登录方式
 1. 正常登录和彩云，记得勾选【下次自动登录】。  
 2. 打开[这个地址](https://caiyun.feixin.10086.cn/Mcloud/sso/getCyToken.action)。 
@@ -72,7 +74,7 @@
 配置示例：  
 ```bash
 XS_KEY_cm=caiyun
-XS_KEY_cm_TOKEN='{"cyToken":"******|*1*|RCS|******|******","encryPhone":"******"}'
+XS_KEY_cm_TOKEN='{"cyToken":"******|*|RCS|******|******","encryPhone":"******"}'
 XS_APP_3_NAME="TCShare 和彩云"
 XS_APP_3_THEME=mdui
 XS_APP_3_BASE=/

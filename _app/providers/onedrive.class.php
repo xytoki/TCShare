@@ -51,7 +51,8 @@ class onedrive implements contentProvider {
         $this->client->setClientSecret($this->clientSecret);
         $this->client->setScopes([
             'offline_access',
-            'files.readwrite.all'
+            'files.readwrite.all',
+            'sites.readwrite.all'
         ]);
         $this->options = $options;
         $this->getToken();
@@ -60,6 +61,9 @@ class onedrive implements contentProvider {
         }
     }
     function initSharepoint(){
+        if(!isset($this->options['app']['domain'])||empty($this->options['app']['domain'])){
+            $this->options['app']['domain']="root";
+        }
         $key = $this->keyPrefix.".sharepoint.".md5($this->options['app']['domain'].$this->options['app']['site']);
         $cached=1;
         $sharepointId = Cache::getInstance()->get($key, function (ItemInterface $item) use(&$cached) {
@@ -77,7 +81,8 @@ class onedrive implements contentProvider {
                 }
             }
             return $res['id'];
-        },1.0);
+        },isset($_GET['_tcshare_renew'])?INF:1.0);
+        Flight::response()->header("X-TCShare-Sharepoint-ID",$cached?"cached":"refreshed");
         $this->rootPrefix = "sites/$sharepointId/drive";
     }
     function getToken(){
@@ -90,7 +95,7 @@ class onedrive implements contentProvider {
             $cached=0;
             $item->expiresAfter(3500);
             return $this->client->refreshToken($this->refreshToken);
-        }, 1.0);
+        }, isset($_GET['_tcshare_renew'])?INF:1.0);
         $this->client->setAccessToken($this->token);
         Flight::response()->header("X-TCShare-OneDrive-Token",$cached?"cached":"refreshed");
     }
@@ -169,7 +174,8 @@ class onedriveAuth implements authProvider{
         $this->client->setClientSecret($this->clientSecret);
         $this->client->setScopes([
             'offline_access',
-            'files.readwrite.all'
+            'files.readwrite.all',
+            'sites.readwrite.all'
         ]);
         $this->client->setRedirectUri($this->redirectUrl);
     }
