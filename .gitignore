@@ -4,3 +4,4 @@
 .env
 .env.local
 .env.runtime
+Private*.php
