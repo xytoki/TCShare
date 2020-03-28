@@ -100,7 +100,7 @@ class onedrive implements contentProvider {
         Flight::response()->header("X-TCShare-OneDrive-Token",$cached?"cached":"refreshed");
     }
     function finPath($file,$child=false){
-        $file = TC::path("/".$this->basePath."/".$file,false);
+        $file = TC::encodeURI(TC::path("/".$this->basePath."/".$file,false));
         $ret = $file=="/"?"":(":$file".($child?":":""));
         return $ret;
     }
