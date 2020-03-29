@@ -120,13 +120,17 @@ function() use($files,$folders,$path,$sort,$order,$current){
 		<?php endforeach;?>
 		<?php foreach($files as $item):?>
 		<li class="mdui-list-item file mdui-ripple">
-			<a data-readypreview="<?php echo TC::ext($item->name());?>" <?php echo $file_ico($item->extension())=="image"?'class="glightbox" data-gallery="tcshare"':"";?> href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>">
-			  <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
-				<i class="mdui-icon material-icons" data-thumbnail="<?php echo $item->thumbnail();?>"><?php echo $file_ico($item->extension());?></i>
-		    	<span><?php echo $item->name() ;?></span>
-			  </div>
-			  <div class="mdui-col-sm-3 mdui-text-right"><?php echo $item->timeModified();?></div>
-			  <div class="mdui-col-sm-2 mdui-text-right"><?php echo TC::human_filesize($item->size());?></div>
+			<a	data-name="<?php echo $item->name();?>"
+				data-readypreview="<?php echo TC::ext($item->name());?>"
+				<?php echo $file_ico($item->extension())=="image"?'class="glightbox" data-gallery="tcshare"':"";?>
+				href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>"
+			>
+			  	<div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+					<i class="mdui-icon material-icons" data-thumbnail="<?php echo $item->thumbnail();?>"><?php echo $file_ico($item->extension());?></i>
+		    		<span><?php echo $item->name() ;?></span>
+			  	</div>
+			  	<div class="mdui-col-sm-3 mdui-text-right"><?php echo $item->timeModified();?></div>
+			  	<div class="mdui-col-sm-2 mdui-text-right"><?php echo TC::human_filesize($item->size());?></div>
 		  	</a>
 			<div class="forcedownload" >
 			      <a title="直接下载" href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>">
