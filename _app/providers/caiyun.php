@@ -110,7 +110,7 @@ class caiyun implements contentProvider {
         if(isset($fileInfo['contentName'])){
             return new caiyunFileInfo($fileInfo,$this);
         }else{
-            return new caiyunFolderInfo($fileInfo);
+            return new caiyunFolderInfo($fileInfo,$this);
         }
     }
     function listFiles($fileInfo){
@@ -121,7 +121,7 @@ class caiyun implements contentProvider {
         $files=TC::toArr($list['contents']);
         foreach($folders as $one){
             if(!$one)continue;
-            $returns[0][]=new caiyunFolderInfo($one);
+            $returns[0][]=new caiyunFolderInfo($one,$this);
         }
         foreach($files as $one){
             if(!$one)continue;
@@ -190,8 +190,6 @@ class caiyunFileInfo extends caiyunAbstractInfo implements fileInfo{
         return false;
     }
     public function url(){
-        $cached = 1;
-        $key="caiyun.download.".$this->file['digest'];
         $res = $this->client->http->get('/downLoadAction!downloadToPC.action?shareContentIDs='.$this->file['contentID']);
         return json_decode($res->getBody(),true)['redirectURL'];
     }
@@ -209,11 +207,27 @@ class caiyunFileInfo extends caiyunAbstractInfo implements fileInfo{
     }
 }
 class caiyunFolderInfo extends caiyunAbstractInfo implements folderInfo{
-    function __construct($file){
+    function __construct($file,$client){
         parent::__construct($file);
+        $this->client=$client;
     }
     public function isFolder(){
         return true;
+    }
+    public function zipDownload(){
+        $key="caiyun.zipDownloadFolder.".$this->file['catalogID'];
+        return Cache::getInstance()->get($key, function (ItemInterface $item){
+            $item->expiresAfter(600);
+            $res = $this->client->http->post('/downLoadAction!downLoadZipPackage.action',[
+                'form_params' => [
+                    'catalogList'=>$this->file['catalogID']."|".$this->file['catalogType'],
+                    'recursive'=>1,
+                    'zipFileName'=>'TCShare_'.$this->file['catalogName'],
+                    'contentList'=>""
+                ]
+            ]);
+            return json_decode($res->getBody(),true)['downloadUrl'];
+        },isset($_GET['_tcshare_renew'])?INF:1.0);
     }
     public function hasIndex(){
         //Not Implemented.
