@@ -26,8 +26,18 @@
 			<?php endif;?>
 			<?php foreach($folders as $item):?>
 					<tr>
-						<td class="file-name"><a class="icon icon-dir" href="<?php echo TC::abspath($path,$item->name());?>"><?php echo $item->name();?>/</a></td>
-						<td class="file-size"> - </td>
+						<td class="file-name">
+							<a class="icon icon-dir" href="<?php echo TC::abspath($path,$item->name());?>/">
+								<?php echo $item->name();?>/
+							</a>
+						</td>
+						<td class="file-size">	
+						<?php if(method_exists($item,"zipDownload")){ ?>
+							<a href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>/?TC_zip">
+									[ZIP]
+							</a>
+						<?php }else{ echo "-"; } ?>
+						</td>
 						<td class="file-date-modified"><?php echo $item->timeModified(); ?></td>
 						<!-- <?php var_dump($item); ?> -->
 					</tr>

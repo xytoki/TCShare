@@ -101,7 +101,7 @@ function() use($files,$folders,$path,$sort,$order){
 		
 		<?php foreach($folders as $item):?>
 		<li class="mdui-list-item mdui-ripple">
-			<a href="<?php echo TC::abspath($path,$item->name());?>">
+			<a href="<?php echo TC::abspath($path,$item->name());?>/">
 			  <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
 				<i class="mdui-icon material-icons">folder_open</i>
 		    	<span><?php echo $item->name();?></span>
@@ -109,6 +109,13 @@ function() use($files,$folders,$path,$sort,$order){
 			  <div class="mdui-col-sm-3 mdui-text-right"><?php echo $item->timeModified();?></div>
 			  <div class="mdui-col-sm-2 mdui-text-right"></div>
 		  	</a>
+			<div class="forcedownload" >
+			<?php if(method_exists($item,"zipDownload")){ ?>
+			      <a title="打包下载" href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>/?TC_zip">
+			          <i class="mdui-icon material-icons">archive</i>
+			      </a>
+			<?php } ?>
+			</div>
 		</li>
 		<?php endforeach;?>
 		<?php foreach($files as $item):?>
@@ -122,7 +129,7 @@ function() use($files,$folders,$path,$sort,$order){
 			  <div class="mdui-col-sm-2 mdui-text-right"><?php echo TC::human_filesize($item->size());?></div>
 		  	</a>
 			<div class="forcedownload" >
-			      <a href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>">
+			      <a title="直接下载" href="<?php echo TC::abspath($path,rawurlencode($item->name()));?>">
 			          <i class="mdui-icon material-icons">file_download</i>
 			      </a>
 			</div>
