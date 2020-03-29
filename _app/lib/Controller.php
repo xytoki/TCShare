@@ -191,7 +191,18 @@ class Controller{
                     return;
                 }
             }
+            /*/是文件夹且不以`/`结尾，跳转带上
+            if(substr($path,-1)!="/"){
+                $rpath = rawurldecode(urldecode(str_replace("?".$_SERVER['QUERY_STRING'],"",Flight::request()->url)));
+                Flight::redirect($rpath."/?".$_SERVER['QUERY_STRING'],301);
+                return;
+            }*/
             //列目录
+            if(isset($_GET['TC_zip'])&&method_exists($fileInfo,"zipDownload")){
+                //打包压缩
+                Flight::redirect($fileInfo->zipDownload(),302);
+                return;
+            }
             list($folders,$files)=$app->listFiles($fileInfo);
             //排序
                 $s = isset($_GET['sort'])?$_GET['sort']:"name";
