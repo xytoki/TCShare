@@ -1,7 +1,7 @@
 <?php   
 TC::layout(
 ["path"=>$path],
-function() use($files,$folders,$path,$sort,$order){
+function() use($files,$folders,$path,$sort,$order,$current){
     
     $file_ico=function($ext){
         if(in_array($ext,['bmp','jpg','jpeg','png','gif',"webp"])){
@@ -175,6 +175,12 @@ function downall() {
      a.click() // 模拟点击
      a.remove();
 }
+jQuery(".getlink-btn").click(function(){
+	var dl_link_list = Array.from(jQuery('a[data-readypreview]'))
+        .map(x => x.href) 				  // 所有list中的链接
+	copyToClipboard(dl_link_list.join("\r\n"));
+	mdui.alert("全部文件链接已复制到剪贴板");
+})
 function thumb(){
 	if($('.mdui-fab i').text() == "apps"){
 		$('.mdui-fab i').text("format_list_bulleted");

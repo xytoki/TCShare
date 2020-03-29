@@ -232,6 +232,7 @@ class Controller{
             if(substr($path,-1)!="/")$path=$path."/";
             Flight::response()->header("X-TCShare-Type","List");
             Flight::render($RUN['app']['theme']."/list",array_merge($RUN,[
+                "current"=>$fileInfo,
                 "path"=>$path,
                 "folders"=>$folders,
                 "files"=>$files,
