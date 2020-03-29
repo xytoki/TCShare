@@ -11,6 +11,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 date_default_timezone_set('PRC');
 define("TC_VERSION",json_decode(file_get_contents("composer.json"),true)['version']);
 require _LOCAL.'/vendor/autoload.php';
+define("XS_RULE_CHECK",-1);
 define("XS_RULE_HALT",0);
 define("XS_RULE_PASS",1);
 define("XS_RULE_SKIP",PHP_INT_MAX);
@@ -46,6 +47,7 @@ function TC_add(){
 if(isset($_ENV['TENCENTCLOUD_RUNENV'])){
     /* Environment is Tencent SCF */
     define("XY_IS_SCF",true);
+    Config::loadFromEnv();
     TC_add();
     function main_handler($event, $context){
         return Flight::start($event, $context, dirname(__FILE__));

@@ -6,7 +6,7 @@ use Throwable;
 class Config{
     static function loadFromEnv(){
         $dotenv = new Dotenv();
-        $envList=[
+        $envList=defined("XY_IS_SCF")?[]:[
             ".env",
             ".env.local",
             ".env.runtime"
