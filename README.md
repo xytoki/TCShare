@@ -1,10 +1,15 @@
 # TCShare v3
-不只是天翼云API的目录列表程序  
-现已增加支持Onedrive 国际版和世纪互联   
-又增加了和彩云  
-接下来可能还有其他？  
+多云盘目录列表程序  
+支持Onedrive 国际版和世纪互联 天翼云API 和彩云  
 【配置文件可视化编辑器绝赞咕咕咕中】  
-[安装教程：这里](https://xylog.cn/2020/03/03/tcshare.html)
+[安装教程：这里](https://xylog.cn/2020/03/03/tcshare.html)  交流群：562963675
+
+### Demo
+
+[天翼云](https://xia.st/)  
+[和彩云](https://xia.st/caiyun/)  
+[OneDrive国际](https://xia.st/d/)  
+[OneDrive世纪互联](https://xia.st/c/)  
 
 ### 安装方式：
 
@@ -101,13 +106,6 @@ XS_APP_3=/caiyun
 #### TODO
  - 其他文件类型的预览
  - header,footer,readme
-
-### Demo
-
-[天翼云](https://xia.st/)  
-[和彩云](https://xia.st/caiyun/)  
-[OneDrive国际](https://xia.st/d/)  
-[OneDrive世纪互联](https://xia.st/c/)  
 
 ### Rewrite规则：
 
