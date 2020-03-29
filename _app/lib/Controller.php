@@ -6,6 +6,7 @@
 namespace xyToki\xyShare;
 use TC;
 use Flight;
+use Mimey\MimeTypes;
 use flight\net\Route;
 use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NotAuthorized;
@@ -186,6 +187,23 @@ class Controller{
                         return;
                     }
                 }else{
+                    //直接返回
+                    if(isset($_GET['TC_direct'])){
+                        $max = 1024*1024;
+                        if(isset($_ENV['XY_MAX_DIRECT_SIZE'])&&is_numeric($_ENV['XY_MAX_DIRECT_SIZE'])){
+                            $max = $_ENV['XY_MAX_DIRECT_SIZE']*1024*1024;
+                        }
+                        if($fileInfo->size()<$max){
+                            //大小正常，尝试直接输出
+                            $content = TC::getFileContent($fileInfo->url(),$base."/".$path);
+                            $mimes = new MimeTypes;
+                            $filemime=$mimes->getMimeType($fileInfo->extension());
+                            if(!$filemime)$filemime = "text/plain; charset=UTF-8";
+                            Flight::response()->header("Content-Type",$filemime);
+                            echo $content;
+                            return;
+                        }
+                    }
                     //下载
                     Flight::redirect($fileInfo->url(),302);
                     return;

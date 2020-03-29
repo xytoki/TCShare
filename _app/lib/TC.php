@@ -3,7 +3,9 @@
  * @package TCShare
  * @author xyToki
  */
+use GuzzleHttp\Client;
 use xyToki\xyShare\Cache;
+use Symfony\Contracts\Cache\ItemInterface;
 Class TC{
     static function get($k){
         global $RUN;
@@ -72,5 +74,20 @@ Class TC{
         return preg_replace_callback("{[^0-9a-z_.!~*'();,/?:@&=$-]}i", function ($m) {
             return sprintf('%%%02X', ord($m[0]));
         }, $uri);
+    }
+    static function getFileContent($url,$cacheKey){
+        $cacheKey = str_replace("/",".",$cacheKey);
+        $cached="cached";
+        $r = Cache::getInstance()->get($cacheKey,function(ItemInterface $item) use($url,&$cached){
+            $cached="refreshed";
+            $item->expiresAfter(300);
+            $http = new Client([
+                'timeout'  => 10.0
+            ]);
+            $response = $http->get($url);
+            return (string)$response->getBody();
+        },isset($_GET['_tcshare_renew'])?INF:1.0);
+        Flight::response()->header("X-TCShare-Direct",$cached);
+        return $r;
     }
 }
