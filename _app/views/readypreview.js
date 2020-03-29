@@ -6,6 +6,7 @@ TC.audio_exts=[
     "aac",
     "m4a",
     "flac",
+    "ape",
     "ogg",
     "wav",
 ];
