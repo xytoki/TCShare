@@ -85,7 +85,9 @@ XS_APP_3=/caiyun
 
 #### 已支持
  - 文件下载
+ - 文件夹打包下载（仅和彩云）
  - 视频播放 (mp4,webm,mkv)
+ - 音频播放 (mp3,aac,m4a,flac,ogg,wav)
  - Office预览 (doc(x),ppt(x),xls(x),pdf)
  - 图片预览 (bmp,jpg,jpeg,png,gif,webp)，使用[glightbox](https://github.com/biati-digital/glightbox)
  - 多盘
@@ -94,10 +96,10 @@ XS_APP_3=/caiyun
  - 密码加密
  - 防盗链
  - Token鉴权
+ - 服务器直接输出（1M以下，`?TC_direct`）
 
 #### TODO
  - 其他文件类型的预览
- - 服务器直接输出
  - header,footer,readme
 
 ### Demo
