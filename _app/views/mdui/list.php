@@ -10,9 +10,12 @@ function() use($files,$folders,$path,$sort,$order,$current){
         if(in_array($ext,['mp4','mkv','webm','avi','mpg', 'mpeg', 'rm', 'rmvb', 'mov', 'wmv', 'mkv', 'asf'])){
       	    return "ondemand_video";
         }
-        if(in_array($ext,['ogg','mp3','wav'])){
+        if(in_array($ext,['ogg','mp3','wav','flac','m4a'])){
       	    return "audiotrack";
-        }
+		}
+		if($ext=="lrc"){
+			return "queue_music";
+		}
         return "insert_drive_file";
     }
 ?>

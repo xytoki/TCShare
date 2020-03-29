@@ -17,6 +17,10 @@
 			height: 40px !important;
 			min-width: 40px !important;
 		}
+		.aplayer-body {
+			max-width: calc(100vw - 18px) !important;
+			width: 400px !important;
+		}
 	</style>
 	<script crossorigin="anonymous" integrity="sha384-GXQQyAWEQJOklZd/6CWH3BbffdVqZ85WoDiENXxSqLpjrdWzpX15CKmya8HIdM4r" src="https://lib.baomitu.com/mdui/0.4.3/js/mdui.min.js"></script>
 </head>
