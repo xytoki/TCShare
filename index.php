@@ -35,6 +35,7 @@ function TC_add(){
     }
 
     Flight::map("notFound",function(){
+        Flight::response()->status(404);
         global $RUN;
         try{
             Flight::render($RUN['app']['theme']."/404");

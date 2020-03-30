@@ -13,6 +13,9 @@ function() use($files,$folders,$path,$sort,$order,$current){
         if(in_array($ext,['ogg','mp3','wav','flac','m4a'])){
       	    return "audiotrack";
 		}
+        if(in_array($ext,['ass','srt'])){
+      	    return "playlist_play";
+		}
 		if($ext=="lrc"){
 			return "queue_music";
 		}

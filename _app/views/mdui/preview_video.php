@@ -3,23 +3,69 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Preview of <?php echo $file->name();?></title>
-        <link crossorigin="anonymous" integrity="sha384-WBkDouo/0CCXxPpQ0M6rTUkTGZL30VNhKNg07BZy/8Le4IXY4jv/ihAvI1J9+s4b" href="https://lib.baomitu.com/dplayer/1.25.0/DPlayer.min.css" rel="stylesheet">
-        <script crossorigin="anonymous" integrity="sha384-6CyF/JZDLd9z4fvRApunnpxkvVlYkSK1WPTbA9u3v2e/HgviJP3b9HVX2gD+/1CC" src="https://lib.baomitu.com/dplayer/1.25.0/DPlayer.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flyio/dist/fly.min.js"></script>
         <style>
             html,body{
                 margin:0;
             }
+            #player {
+                width: 100%;
+                height: 100%;
+            }
+            .art-contextmenu-version a {
+                display: none;
+            }
+            .art-control-subtitle {
+                display: none;
+            }
+            .hasSub .art-control-subtitle {
+                display: inline-block;
+            }
         </style>
     </head>
     <body>
-        <div id="dplayer"></div>
+        <div id="player"></div>
         <script>
-        var dp = new DPlayer({
-            container: document.getElementById('dplayer'),
-            video: {
-                url: '<?php echo $file->url();?>',
+        window.art = new Artplayer({
+            container: '#player',
+            url: '<?php echo $file->url();?>',
+            title: '<?php echo $file->name();?>',
+            pip: true,
+            setting: true,
+            loop: true,
+            flip: true,
+            playbackRate: true,
+            fullscreen: true,
+            subtitleOffset: true,
+            localSubtitle: true,
+            subtitle:{
+                url:'data:text/plain,'
             }
         });
+        var paths = location.href.replace('?'+location.search,"").split(".");
+        paths[paths.length-1] = "srt";
+        var srtUrl = paths.join(".");
+        paths[paths.length-1] = "ass";
+        var assUrl = paths.join(".");
+        fly.get(srtUrl+"?TC_direct").then(function(res){
+            //srt存在
+            var url = URL.createObjectURL(new Blob([res.data]));
+            art.subtitle.switch(url, 'srt', 'srt');
+        }).catch(function(){ 
+            fly.get(assUrl+"?TC_direct").then(function(res){
+                //ass存在
+                var url = URL.createObjectURL(new Blob([res.data]));
+                art.subtitle.switch(url, 'ass', 'ass');
+            }).catch(function(){});
+        })
+        art.on("subtitle:switch",function(){
+            document.body.classList.add("hasSub");
+        });
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = ".art-contextmenu-version::before {content: 'TCShare <?php echo TC_VERSION;?> / artPlayer "+Artplayer.version+"';}";
+        document.getElementsByTagName('head')[0].appendChild(style);
         </script>
     </body>
 </html>
