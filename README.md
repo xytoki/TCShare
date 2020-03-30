@@ -2,8 +2,7 @@
 多云盘目录列表程序  
 支持Onedrive 国际版和世纪互联 天翼云API 和彩云  
 【配置文件可视化编辑器绝赞咕咕咕中】  
-[安装教程：这里](https://xylog.cn/2020/03/03/tcshare.html)  交流群：562963675
-
+[安装教程：这里](https://xylog.cn/2020/03/03/tcshare.html)
 ### Demo
 
 [天翼云](https://xia.st/)  
