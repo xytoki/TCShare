@@ -5,7 +5,7 @@
 window.TC=window.TC||{};
 TC.password=function(val){
     var hash=md5(TC.passname+val);
-    Cookies.set(TC.passname,hash, { expires: 7, path: '/' });
+    Cookies.set(TC.passname,hash, { path: '/' });
     location.reload();
     return false;
 }

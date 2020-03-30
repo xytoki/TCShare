@@ -25,6 +25,6 @@ interface folderInfo extends abstractInfo{
 }
 namespace xyToki\xyShare\Rules{
     interface abstractRule {
-        static function check(String $path,Array $config);
+        static function check(String $path,Array $config,$file);
     }
 }

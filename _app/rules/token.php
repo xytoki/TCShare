@@ -15,7 +15,7 @@ use Throwable;
 
 class token implements abstractRule{
     const baseTime="1580646002";        //2020-02-02 20:20:02 CST
-    static function check($url,$rule){
+    static function check($url,$rule,$file){
         try{
             $secret=$rule['val'];
             if(isset($_GET['_tcshare'])){

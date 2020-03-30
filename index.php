@@ -11,7 +11,6 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 date_default_timezone_set('PRC');
 define("TC_VERSION",json_decode(file_get_contents("composer.json"),true)['version']);
 require _LOCAL.'/vendor/autoload.php';
-define("XS_RULE_CHECK",-1);
 define("XS_RULE_HALT",0);
 define("XS_RULE_PASS",1);
 define("XS_RULE_SKIP",PHP_INT_MAX);
@@ -20,8 +19,6 @@ function TC_add(){
     Controller::cachedUrl();
     global $TC;
     $bases=[];
-    /* 访问规则 */
-    Controller::rules($TC['Rules']);
     /* 主程序 */
     foreach($TC['Apps'] as $app){
         $base=$app['route'];

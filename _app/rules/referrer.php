@@ -2,7 +2,7 @@
 namespace xyToki\xyShare\Rules;
 use Flight;
 class referrer implements abstractRule{
-    static function check($path,$rule){
+    static function check($path,$rule,$file){
         $hosts=explode(",",$rule['val']);
         if($_SERVER['HTTP_REFERER'] ==""){
             return (isset($rule['empty'])&&$rule['empty']=="false")?self::fail():XS_RULE_PASS;

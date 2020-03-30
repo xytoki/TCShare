@@ -49,26 +49,33 @@ class Controller{
             return true;
         });
     }
-    static function rules($rules){
-        Flight::route("/*",function($route) use($rules){
-            $rs=[];
-            foreach($rules as $rule){
-                $rs[]=$rule;
+    static function rules($rules,$splat,$fileInfo){
+        $rs=[];
+        foreach($rules as $rule){
+            $rs[]=$rule;
+        }
+        for($i=0;$i<count($rs);){
+            $ret=self::rule($rs[$i],"/".$splat,$fileInfo);
+            if($ret==XS_RULE_HALT){
+                return false;
             }
-            for($i=0;$i<count($rs);){
-                $ret=self::rule($rs[$i],"/".$route->splat);
-                if($ret==XS_RULE_HALT){
-                    return;
-                }
-                if($ret==XS_RULE_SKIP){
-                    break;
-                }
-                $i+=$ret;
+            if($ret==XS_RULE_SKIP){
+                break;
             }
-            return true;
-        },true);
+            $i+=$ret;
+        }
+        return true;
     }
-    static function rule($rule,$path){
+    static function rule($rule,$path,$fileInfo){
+        $thisType = $fileInfo->isFolder()?"folder":"file";
+        if(isset($rule['ignore'])){
+            $ignores = explode(";",$rule['ignore']);
+            if( in_array($thisType,$ignores) || 
+                ( !$fileInfo->isFolder()&&in_array($fileInfo->extension(),$ignores) )
+            ){
+                return XS_RULE_PASS;
+            }
+        }
         $pattern = $rule['route'];
         $encoded = TC::encodeURI($rule['route']);
         if(self::urlMatch($pattern)||self::urlMatch($encoded)){
@@ -77,7 +84,7 @@ class Controller{
             if(!empty($type)&&!strstr($type,"\\")){
                 $type="xyToki\\xyShare\\Rules\\".$type;
             }
-            return $type::check($path,$rule);
+            return $type::check($path,$rule,$fileInfo);
         }
         return XS_RULE_PASS;
     }
@@ -171,6 +178,11 @@ class Controller{
                 //Go to next disk until really 404.
             }
             if(!$fileInfo)return;
+            //访问规则
+            global $TC;
+            if(!Controller::rules($TC['Rules'],$route->splat,$fileInfo)){
+                return;
+            }
             //有md5的，都是文件，跳走
             if(!$fileInfo->isFolder()){
                 //预览
