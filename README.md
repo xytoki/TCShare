@@ -91,8 +91,9 @@ XS_APP_3=/caiyun
 #### 已支持
  - 文件下载
  - 文件夹打包下载（仅和彩云）
- - 视频播放 (mp4,webm,mkv)
- - 音频播放 (mp3,aac,m4a,flac,ogg,wav)
+ - 视频播放 (mp4,webm,mkv) 使用[ArtPlayer](https://github.com/zhw2590582/ArtPlayer)
+ - 视频外挂字幕 (ass,srt) 需为同名在同目录下
+ - 音频播放 (mp3,aac,m4a,flac,ogg,wav) 使用[APlayer](https://aplayer.js.org)
  - Office预览 (doc(x),ppt(x),xls(x),pdf)
  - 图片预览 (bmp,jpg,jpeg,png,gif,webp)，使用[glightbox](https://github.com/biati-digital/glightbox)
  - 多盘
