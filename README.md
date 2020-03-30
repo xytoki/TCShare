@@ -180,6 +180,10 @@ XS_SEC_3_VAL=password123
 # 除了Token之外，其他规则返回失败时将终止程序
 # Token失败会跳到下一条规则 争取会忽略下面所有
 # 所以目前如需使用token必须在下面放置password。
+
+XS_SEC_<id>_IGNORE=file    #此规则对文件无效
+XS_SEC_<id>_IGNORE=folder  #此规则对文件夹无效
+XS_SEC_<id>_IGNORE=mp4;mkv #此规则对mp4 mkv后缀文件无效
 ```
 #### Token计算方式
 可用于附件CDN等高级用途。

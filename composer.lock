@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c8d7f868b67bbc0a1c1e87872a66028",
+    "content-hash": "0060c9927e840d1125abb404a00eaf87",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -1142,16 +1142,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v3.4.38",
+            "version": "v3.4.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "54497400a11ace66731c5a6bb4f523aaa95c6d4b"
+                "reference": "494c9bbee9111e751b91833244cc3e9a06a27712"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/54497400a11ace66731c5a6bb4f523aaa95c6d4b",
-                "reference": "54497400a11ace66731c5a6bb4f523aaa95c6d4b",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/494c9bbee9111e751b91833244cc3e9a06a27712",
+                "reference": "494c9bbee9111e751b91833244cc3e9a06a27712",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1212,11 +1212,25 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2020-01-04T12:05:51+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-03-16T15:16:37+00:00"
         },
         {
             "name": "symfony/property-info",
-            "version": "v3.4.38",
+            "version": "v3.4.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
@@ -1298,16 +1312,16 @@
         },
         {
             "name": "symfony/serializer",
-            "version": "v3.4.38",
+            "version": "v3.4.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "f8b99832d016e2d2c77c797c3df561adecd33dd3"
+                "reference": "2b5a266b4e9b4403d669449de059686dd186ed33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/f8b99832d016e2d2c77c797c3df561adecd33dd3",
-                "reference": "f8b99832d016e2d2c77c797c3df561adecd33dd3",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/2b5a266b4e9b4403d669449de059686dd186ed33",
+                "reference": "2b5a266b4e9b4403d669449de059686dd186ed33",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1379,7 +1393,21 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "time": "2020-02-24T14:33:45+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-03-16T08:31:04+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -1527,16 +1555,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.38",
+            "version": "v3.4.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "bc63e15160866e8730a1f738541b194c401f72bf"
+                "reference": "e701b47e11749970f63803879c4febb520f07b6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/bc63e15160866e8730a1f738541b194c401f72bf",
-                "reference": "bc63e15160866e8730a1f738541b194c401f72bf",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/e701b47e11749970f63803879c4febb520f07b6c",
+                "reference": "e701b47e11749970f63803879c4febb520f07b6c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -1588,7 +1616,21 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-16T19:04:26+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-03-25T12:02:26+00:00"
         },
         {
             "name": "tarask/onedrive",
