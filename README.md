@@ -204,6 +204,13 @@ $expire = 300;
 echo $path."&_tcshare=",token($path,$secret,$expire);
 // returns /dir1/1.jpg?query_string=should_be_calcuated&_tcshare=1d435a917e04e8c824eb21
 ```
+
+### 其他配置项
+```shell
+    XS_SUBTITLE_FIND='${dir}subs/${name}.srt;${dir}subs/${name}.ass'
+    # 设置播放器如何搜索字幕文件。仅PC版。记得写配置文件要有两侧单引号。
+```
+
 ### 在腾讯云云函数(SCF)运行
 
 1. 下载程序
@@ -211,7 +218,7 @@ echo $path."&_tcshare=",token($path,$secret,$expire);
 3. 上传到腾讯云，函数名是`index.main_handler`
 4. 设置环境变量，然后安装
 5. 若绑定域名，请增加一条环境变量：`scf_base=/`，其中`/`是绑定的路径。
-
+6. 设置环境变量的时候**注意不需要两侧引号！！！**
 ### 付费定制等
 
 本程序开发纯属个人需求及爱好，故何时更新、更新什么内容也岁个人兴趣。  
