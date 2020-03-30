@@ -41,7 +41,8 @@
             localSubtitle: true,
             subtitle:{
                 url:'data:text/plain,'
-            }
+            },
+            whitelist: [(ua)=>{ return true; }]
         });
         var paths = location.href.replace('?'+location.search,"").split(".");
         paths[paths.length-1] = "srt";
