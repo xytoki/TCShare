@@ -35,6 +35,7 @@ class caiyun implements contentProvider {
             if($j)$options['TOKEN'] = $j->cyToken;
         }catch(Throwable $e){}
         $this->cookie = $options['TOKEN'];
+        $this->BASE = $options['BASE'];
         $cookieJar = CookieJar::fromArray([
             '.mssc' => $options['TOKEN']
         ], 'caiyun.feixin.10086.cn');
