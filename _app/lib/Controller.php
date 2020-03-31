@@ -186,18 +186,16 @@ class Controller{
             //有md5的，都是文件，跳走
             if(!$fileInfo->isFolder()){
                 //预览
-                if($_SERVER['REQUEST_METHOD']=="POST"||isset($_GET['TC_preview'])){
-                    $config=TC::get_preview_ext();
-                    if(isset($config[$fileInfo->extension()])){
+                $config=TC::get_preview_ext();
+                if(
+                    ($_SERVER['REQUEST_METHOD']=="POST"||isset($_GET['TC_preview']))
+                    &&(isset($config[$fileInfo->extension()]))
+                ){
                         Flight::render(
                             $RUN['app']['theme']."/".$config[$fileInfo->extension()],
                             array_merge($RUN,["file"=>$fileInfo,"base"=>$base,"path"->$path])
                         );
                         return;
-                    }else{
-                        var_dump($fileInfo);
-                        return;
-                    }
                 }else{
                     //直接返回
                     if(isset($_GET['TC_direct'])){
