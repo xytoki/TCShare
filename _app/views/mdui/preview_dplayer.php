@@ -35,7 +35,7 @@
         var dp = new DPlayer({
             container: document.getElementById('dplayer'),
             video: {
-                url: '<?php echo $file->url();?>',
+                url: '<?php echo (method_exists($file,"preview"))?$file->preview():$file->url();?>',
             },
             subtitle:{
                 url:"data:text/plain,"

@@ -217,7 +217,7 @@ class Controller{
                         }
                     }
                     //下载
-                    Flight::redirect($fileInfo->url(),302);
+                    Flight::redirect(isset($_GET['TC_transcode'])?$fileInfo->preview():$fileInfo->url(),302);
                     return;
                 }
             }

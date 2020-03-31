@@ -60,7 +60,7 @@
     XS_KEY_od_SK=client_secret
     XS_KEY_od_FD=redirect_uri  #格式：http://domain/_app/redirect
 ```
-#### SharePoint配置方式
+#### SharePoint使用方式
 前期配置与onedrive相同，只需要在app配置处加上
 ```bash
     XS_APP_<id>_MODE=sharepoint
@@ -69,7 +69,7 @@
 ```
 也就是说你可以一个key挂一个od和多个sharepoint。
 
-#### 和彩云登录方式
+#### 和彩云使用方式
 1. 正常登录和彩云，记得勾选【下次自动登录】。  
 2. 打开[这个地址](https://caiyun.feixin.10086.cn/Mcloud/sso/getCyToken.action)。 
 3. 复制里面所有内容，**两边加上单引号**（重要！），填入到配置文件/环境变量的`XS_KEY_<name>_TOKEN`字段中  
@@ -79,12 +79,14 @@
 ```bash
 XS_KEY_cm=caiyun
 XS_KEY_cm_TOKEN='{"cyToken":"******|*|RCS|******|******","encryPhone":"******"}'
-XS_APP_3_NAME="TCShare 和彩云"
-XS_APP_3_THEME=mdui
-XS_APP_3_BASE=/
-XS_APP_3_KEY=cm
-XS_APP_3=/caiyun
+XS_APP_<id>_NAME="TCShare 和彩云"
+XS_APP_<id>_THEME=mdui
+XS_APP_<id>_BASE=/
+XS_APP_<id>_KEY=cm
+XS_APP_<id>=/caiyun
 ```
+> 由于和彩云服务端接口限制，在线播放视频将默认播放经过和彩云服务器转码后的文件，**这将导致视频分辨率降至`720p`(1280x720)，码率降至`1Mbps`**。这不会影响文件下载（包括外链播放）。如果遇到外链播放失败的问题，可以尝试在链接后加上`?TC_transcode`请求转码链接。你也可以在配置文件中加入`XS_APP_<id>_NO_TRANSCODE=true`以禁用转码功能，但这可能导致部分情况下视频播放失败（如目前已知iOS设备无法播放）。
+
 ### 功能
 
 #### 已支持

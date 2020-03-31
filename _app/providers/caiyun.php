@@ -36,6 +36,7 @@ class caiyun implements contentProvider {
         }catch(Throwable $e){}
         $this->cookie = $options['TOKEN'];
         $this->BASE = $options['BASE'];
+        $this->NO_TRANSCODE = isset($options['app']['no_transcode'])&&$options['app']['no_transcode']=='true';
         $cookieJar = CookieJar::fromArray([
             '.mssc' => $options['TOKEN']
         ], 'caiyun.feixin.10086.cn');
@@ -193,6 +194,12 @@ class caiyunFileInfo extends caiyunAbstractInfo implements fileInfo{
     public function url(){
         $res = $this->client->http->get('/downLoadAction!downloadToPC.action?shareContentIDs='.$this->file['contentID']);
         return json_decode($res->getBody(),true)['redirectURL'];
+    }
+    public function preview(){
+        if($this->file['presentHURL']&&!$this->client->NO_TRANSCODE){
+            return $this->file['presentHURL'];
+        }
+        return $this->url();
     }
     public function size(){
         return $this->file['contentSize'];

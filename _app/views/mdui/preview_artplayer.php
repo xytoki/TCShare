@@ -61,7 +61,7 @@
         }
         window.art = new Artplayer({
             container: '#player',
-            url: '<?php echo $file->url();?>',
+            url: '<?php echo (method_exists($file,"preview"))?$file->preview():$file->url();?>',
             title: '<?php echo $file->name();?>',
             pip: true,
             setting: true,
