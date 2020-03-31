@@ -36,7 +36,7 @@ class caiyun implements contentProvider {
         }catch(Throwable $e){}
         $this->cookie = $options['TOKEN'];
         $this->BASE = $options['BASE'];
-        $this->NO_TRANSCODE = isset($options['app']['no_transcode'])&&$options['app']['no_transcode']=='true';
+        $this->NO_TRANSCODE = isset($options['app']['no_transcode'])?$options['app']['no_transcode']:false;
         $cookieJar = CookieJar::fromArray([
             '.mssc' => $options['TOKEN']
         ], 'caiyun.feixin.10086.cn');
@@ -196,7 +196,21 @@ class caiyunFileInfo extends caiyunAbstractInfo implements fileInfo{
         return json_decode($res->getBody(),true)['redirectURL'];
     }
     public function preview(){
-        if($this->file['presentHURL']&&!$this->client->NO_TRANSCODE){
+        switch ($this->client->NO_TRANSCODE){
+            case "true":
+                $transcode = false;
+            break;
+            case "except_ios":
+                if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'iphone') || strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'ipad')){
+                    $transcode = true;
+                }else{
+                    $transcode = false;
+                }
+            break;
+            default:
+                $transcode = true;
+        }
+        if($transcode&&$this->file['presentHURL']){
             return $this->file['presentHURL'];
         }
         return $this->url();
