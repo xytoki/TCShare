@@ -8,11 +8,7 @@
         "vendor-dir": "_app/vendor"
     },
     "autoload": {
-        "classmap": ["_app/lib","_app/providers","_app/rules"],
-        "psr-4": {
-            "xyToki\\xyShare\\Providers\\":"_plugins/",
-            "xyToki\\xyShare\\Rules\\":"_plugins/"
-        }
+        "classmap": ["_app/lib","_app/providers","_app/rules","_plugins"]
     },
     "require": {
         "xytoki/scf-flight": "^0.0.6",
