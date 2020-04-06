@@ -49,13 +49,13 @@ class Controller{
             return true;
         });
     }
-    static function rules($rules,$splat,$fileInfo){
+    static function rules($rules,$path,$fileInfo){
         $rs=[];
         foreach($rules as $rule){
             $rs[]=$rule;
         }
         for($i=0;$i<count($rs);){
-            $ret=self::rule($rs[$i],"/".$splat,$fileInfo);
+            $ret=self::rule($rs[$i],$path,$fileInfo);
             if($ret==XS_RULE_HALT){
                 return false;
             }
@@ -180,7 +180,7 @@ class Controller{
             if(!$fileInfo)return;
             //访问规则
             global $TC;
-            if(!Controller::rules($TC['Rules'],$route->splat,$fileInfo)){
+            if(!Controller::rules($TC['Rules'],Flight::request()->url,$fileInfo)){
                 return;
             }
             //有md5的，都是文件，跳走

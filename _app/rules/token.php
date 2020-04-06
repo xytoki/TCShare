@@ -20,7 +20,7 @@ class token implements abstractRule{
             $secret=$rule['val'];
             if(isset($_GET['_tcshare'])){
                 $path=str_replace("_tcshare=".$_GET['_tcshare'],"",$url);
-                $path=str_replace("?&","?",$path);
+                $path=rawurldecode(str_replace("?&","?",$path));
                 if(substr($path,-1,1)=="&"){
                     $path=substr($path,0,strlen($path)-1);
                 }
