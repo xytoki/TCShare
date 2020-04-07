@@ -82,7 +82,10 @@ Class TC{
             $cached="refreshed";
             $item->expiresAfter(300);
             $http = new Client([
-                'timeout'  => 10.0
+                'timeout'  => 10.0,
+                'headers'  =>[
+                    "User-Agent"=>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/0.0.0.0 Safari/0.0"
+                ]
             ]);
             $response = $http->get($url);
             return (string)$response->getBody();
