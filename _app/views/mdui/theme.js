@@ -135,11 +135,14 @@ TC.readme_render = function(readmeLink,headerLink){
 (function(){
     var readme_link,header_link;
     jQuery("a[data-readypreview=md]").each(function(){
-        if(jQuery(this).data("name").toLowerCase()=="readme.md"){
+        var fname = jQuery(this).data("name").toLowerCase();
+        if(fname=="readme.md"){
             readme_link = "?TC_getfile="+jQuery(this).data("name")+"&TC_direct";
+            jQuery(this).parent().hide();
         }
-        if(jQuery(this).data("name").toLowerCase()=="header.md"){
+        if(fname=="header.md"||fname=="head.md"){
             header_link = "?TC_getfile="+jQuery(this).data("name")+"&TC_direct";
+            jQuery(this).parent().hide();
         }
     })
     TC.readme_render(readme_link,header_link);
