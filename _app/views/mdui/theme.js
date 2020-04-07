@@ -50,3 +50,57 @@ TC.preview_audio = function(aud){
         TC.aplayer.setMode("normal");
     }
 }
+TC.askPreview=function(ext,link){
+    return new Promise(function(resolve,reject){
+        if($('.mdui-fab i').text() != "apps")return resolve();
+        if(confirm("请选择您的操作\n[确认]:预览\n[取消]:下载"))return resolve();
+        reject();
+    });
+}
+jQuery(".forcedownload").click(function(e){
+   e.stopPropagation();
+});
+function downall() {
+     let dl_link_list = Array.from(document.querySelectorAll("li a"))
+         .map(x => x.href) // 所有list中的链接
+         .filter(x => x.slice(-1) != "/"); // 筛选出非文件夹的文件下载链接
+
+     let blob = new Blob([dl_link_list.join("\r\n")], {
+         type: 'text/plain'
+     }); // 构造Blog对象
+     let a = document.createElement('a'); // 伪造一个a对象
+     a.href = window.URL.createObjectURL(blob); // 构造href属性为Blob对象生成的链接
+     a.download = "folder_download_link.txt"; // 文件名称，你可以根据你的需要构造
+     a.click() // 模拟点击
+     a.remove();
+}
+jQuery(".getlink-btn").click(function(){
+	var dl_link_list = Array.from(jQuery('a[data-readypreview]'))
+        .map(x => x.href) 				  // 所有list中的链接
+	copyToClipboard(dl_link_list.join("\r\n"));
+	mdui.alert("全部文件链接已复制到剪贴板");
+})
+function thumb(){
+	if($('.mdui-fab i').text() == "apps"){
+		$('.mdui-fab i').text("format_list_bulleted");
+		$('.nexmoe-item').removeClass('thumb');
+		$('.nexmoe-item .mdui-icon').show();
+		$('.nexmoe-item .mdui-list-item').css("background","");
+	}else{
+		$('.mdui-fab i').text("apps");
+		$('.nexmoe-item').addClass('thumb');
+		$('.mdui-col-xs-12 i.mdui-icon').each(function(){
+			if($(this).text() == "image" || $(this).text() == "ondemand_video"){
+			    try{
+			        var j = jQuery(this).data("thumbnail");
+					if(!j||j.trim()=="")return;
+				    jQuery(this).hide();
+				    jQuery(this).parent().parent().parent().css("background","url("+j+")  no-repeat center");
+			    }catch(e){
+			        console.error(e)
+			    }
+			}
+		});
+	}
+}
+var lightbox = GLightbox();
