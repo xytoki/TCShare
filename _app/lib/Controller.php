@@ -169,7 +169,10 @@ class Controller{
             }
             //格式化path
             $path="/".rawurldecode(urldecode(str_replace("?".$_SERVER['QUERY_STRING'],"",$route->splat)));
-            $path=str_replace("//","/",$path);
+            if(isset($_GET['TC_getfile'])){
+                $path.="/".$_GET['TC_getfile'];
+            }
+            $path=TC::path($path,false);
             //获取文件信息
             try{
                 $fileInfo=$app->getFileInfo($path);
