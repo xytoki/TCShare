@@ -152,7 +152,10 @@ class Controller{
                 /* token失败了 */
                 ?><script>location.replace("./-install?faild=true")</script><?php
             }
-            if($c==0&&$RUN['ACCESS_TOKEN']!=$newToken){
+            if( $c==0 
+                && isset($RUN['ACCESS_TOKEN']) && !empty($RUN['ACCESS_TOKEN'])
+                && $RUN['ACCESS_TOKEN']!=$newToken
+            ){
                 throw new \Error("AccessToken Mismatch");
             }
             $res=Config::write($keyname,$newToken);
