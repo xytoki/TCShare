@@ -32,6 +32,12 @@ function() use($files,$folders,$path,$sort,$order,$current){
 .thumb .mdui-text-right{
 	display: none;
 }
+.thumb .mdui-list-item{
+	max-width:calc( 50% - 20px );
+    background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
+}
 .thumb .mdui-list-item a ,.thumb .mdui-list-item {
 	width:217px;
 	height: 230px;

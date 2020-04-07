@@ -91,16 +91,14 @@ function thumb(){
 		$('.mdui-fab i').text("apps");
 		$('.nexmoe-item').addClass('thumb');
 		$('.mdui-col-xs-12 i.mdui-icon').each(function(){
-			if($(this).text() == "image" || $(this).text() == "ondemand_video"){
 			    try{
 			        var j = jQuery(this).data("thumbnail");
 					if(!j||j.trim()=="")return;
 				    jQuery(this).hide();
-				    jQuery(this).parent().parent().parent().css("background","url("+j+")  no-repeat center");
+				    jQuery(this).parent().parent().parent().css("background-image","url("+j+")");
 			    }catch(e){
 			        console.error(e)
 			    }
-			}
 		});
 	}
 }
