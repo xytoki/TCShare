@@ -222,10 +222,10 @@ class caiyunFileInfo extends caiyunAbstractInfo implements fileInfo{
         return strtolower($this->file['contentSuffix']);
     }
     public function thumbnail(){
-        if(!isset($this->file['thumbnailURL'])){
+        if(empty($this->file['thumbnailURL'])){
             return false;
         }
-        return $this->file['thumbnailURL'];
+        return !empty($this->file['bigthumbnailURL'])?$this->file['bigthumbnailURL']:$this->file['thumbnailURL'];
     }
 }
 class caiyunFolderInfo extends caiyunAbstractInfo implements folderInfo{
