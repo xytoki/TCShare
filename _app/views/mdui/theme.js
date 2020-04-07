@@ -1,4 +1,5 @@
 window.TC = window.TC||{};
+/* 音频预览 */
 TC.audio_exts=TC.audio_ext||[
     "mp3",
     "aac",
@@ -104,3 +105,42 @@ function thumb(){
 	}
 }
 var lightbox = GLightbox();
+/* README.md */
+TC.readme_render = function(readmeLink,headerLink){
+    var todo=[
+        TC.loadScript("https://lib.baomitu.com/marked/0.8.0/marked.min.js")
+    ]
+    if(readmeLink){
+        todo.push(fly.get(readmeLink));
+    }else{
+        todo.push(Promise.resolve(false));
+    }
+    if(headerLink){
+        todo.push(fly.get(headerLink));
+    }else{
+        todo.push(Promise.resolve(false));
+    }
+    Promise.all(todo).then(function(reses){
+        if(reses[1]){
+            var readmeTxt = reses[1].data;
+            jQuery(".readme-content").html(marked(readmeTxt));
+            jQuery(".readme-box").show();
+        }
+        if(reses[2]){
+            var headerTxt = reses[2].data;
+            jQuery(".header-content").html(marked(headerTxt)).show();
+        }
+    })
+};
+(function(){
+    var readme_link,header_link;
+    jQuery("a[data-readypreview=md]").each(function(){
+        if(jQuery(this).data("name").toLowerCase()=="readme.md"){
+            readme_link = "?TC_getfile="+jQuery(this).data("name")+"&TC_direct";
+        }
+        if(jQuery(this).data("name").toLowerCase()=="header.md"){
+            header_link = "?TC_getfile="+jQuery(this).data("name")+"&TC_direct";
+        }
+    })
+    TC.readme_render(readme_link,header_link);
+})();

@@ -116,10 +116,10 @@ XS_APP_<id>=/caiyun
  - 防盗链
  - Token鉴权
  - 服务器直接输出（1M以下，`?TC_direct`）
+ - header,readme
 
 #### TODO
- - 其他文件类型的预览
- - header,footer,readme
+ - 更多文件类型的预览
 
 ### Rewrite规则：
 

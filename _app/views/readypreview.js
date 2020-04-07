@@ -21,3 +21,20 @@ TC.askPreview=function(ext,link){
        resolve(); 
     });
 }
+TC.loadScript = function(url){
+	return new Promise(function(resolve, reject){
+		var head = document.getElementsByTagName('head')[0]
+		var script = document.createElement('script')
+		script.type = 'text/javascript'
+		script.addEventListener('load', function(){
+			this.removeEventListener('load', arguments.callee)
+			resolve(script)
+		})
+		script.addEventListener('error', function(err){
+			this.removeEventListener('error', arguments.callee)
+			reject(err)
+		})
+		script.src = url
+		head.appendChild(script)
+	})
+}

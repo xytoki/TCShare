@@ -24,11 +24,7 @@ function() use($files,$folders,$path,$sort,$order,$current){
 ?>
 <link rel="stylesheet" href="<?php echo TC::viewpath("/static/css/glightbox.min.css");?>">
 <div class="mdui-container-fluid">
-
-<!--div class="mdui-typo" style="padding: 20px;">
-	
-</div-->
-
+<div class="mdui-typo nexmoe-item header-content" style="padding: 5px 20px !important;display:none;"></div>
 <style>
 .thumb .th{
 	display: none;
@@ -71,6 +67,9 @@ function() use($files,$folders,$path,$sort,$order,$current){
 }
 .forcedownload:hover{
     color:#555;
+}
+.header-content p {
+    margin: 0;
 }
 </style>
 <div class="nexmoe-item">
@@ -148,16 +147,15 @@ function() use($files,$folders,$path,$sort,$order,$current){
 	</ul>
 </div>
 </div>
-<?php //if($readme):?>
-<!--div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px; 0">
+<div class="mdui-typo nexmoe-item mdui-shadow-3 readme-box" style="padding: 20px !important;display:none">
 	<div class="mdui-chip">
 	  <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span>
 	  <span class="mdui-chip-title">README.md</span>
 	</div>
-	<?php //e($readme);?>
-</div-->
-<?php //endif;?>
+	<div class="readme-content"></div>
 </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/flyio/dist/fly.min.js"></script>
 <?php
 	TC::readypreview();
 	TC::viewjs("/static/js/glightbox.min.js",false);
