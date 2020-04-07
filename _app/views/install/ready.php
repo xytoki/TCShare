@@ -7,6 +7,11 @@
     <script src="https://cdn.jsdelivr.net/npm/flyio@0.6.14/dist/fly.min.js"></script>
 </head>
 <body>
+    <?php 
+        if(isset($_GET['faild'])){
+            echo "授权失败，请重试。";
+        }
+    ?>
     <h1>xyShare Install</h1>
     <div id="load">Please wait.....</div>
     <a id="link" style="display:none" href="javascript:">Click here to authorize</a><br><br>
@@ -17,6 +22,8 @@
                 var a=document.getElementById("link");
                 a.href=e.data.url;
                 a.style.display="block";
+            }).catch(function(err){
+                if(err.response)document.getElementById("load").innerHTML="<pre>Error："+err.response.data+"</pre>";
             });
         </script>
 </body>

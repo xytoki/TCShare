@@ -102,8 +102,26 @@ class Controller{
         }
         return false;
     }
+    static function authConfig(){
+        if(isset($_ENV['XS_CONFIG_PASS'])){
+            Flight::response()->header('WWW-Authenticate','Basic realm="TCShare Configure"');
+            if (
+                ( isset($_SERVER['PHP_AUTH_USER']) && $_ENV['XS_CONFIG_PASS']==$_SERVER['PHP_AUTH_USER'] )
+              ||( isset($_SERVER['PHP_AUTH_PW']) && $_ENV['XS_CONFIG_PASS']==$_SERVER['PHP_AUTH_PW'] )
+            ) {
+                return 1;
+            }else{
+                Flight::response()->status(401);
+                echo "401";
+                return -1;
+            }
+        }
+        return 0;
+    }
     static function installer($base=""){
         Flight::route($base."/-authurl",function(){
+            $c = self::authConfig();
+            if($c<0)return;
             global $RUN;
             if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
                 throw new Error("Undefined provider >".$RUN['provider']."<");
@@ -119,6 +137,8 @@ class Controller{
         Flight::route($base."/-renew",$cb);
         /* 授权回调 */
         Flight::route($base."/-callback",function() use($base){
+            $c = self::authConfig();
+            if($c<0)return;
             global $RUN;
             if(!isset($RUN['provider'])||!class_exists($RUN['provider'])){
                 throw new Error("Undefined provider >".$RUN['provider']."<");
@@ -126,7 +146,16 @@ class Controller{
             $authProvider=isset($RUN['authProvider'])?$RUN['authProvider']:($RUN['provider']."Auth");
             $oauthClient=new Provider($authProvider,$RUN);
             $oauthClient->getToken();
-            $res=Config::write("XS_KEY_".$RUN['ID']."_ACCESS_TOKEN",$oauthClient->token());
+            $keyname = "XS_KEY_".$RUN['ID']."_ACCESS_TOKEN";
+            $newToken = $oauthClient->token();
+            if(!$newToken){
+                /* token失败了 */
+                ?><script>location.replace("./-install?faild=true")</script><?php
+            }
+            if($c==0&&$RUN['ACCESS_TOKEN']!=$newToken){
+                throw new \Error("AccessToken Mismatch");
+            }
+            $res=Config::write($keyname,$newToken);
             if( isset($RUN['ACCESS_TOKEN']) && $RUN['ACCESS_TOKEN']!="" ){
                     ?>
                     <h1>xyShare Renew</h1>
@@ -138,19 +167,14 @@ class Controller{
                     }
                 return;
             }
-            
             if($res){
                 Flight::redirect($base."/");
                 return;
             }
             ?>
             <h1>xyShare Install</h1>
-            <?php if(defined('XY_USE_CONFPHP')){ ?>
-                Please set <code>ACCESS_TOKEN</code> below in <code>config.php</code>
-            <?php }else{ ?>
-                Please set  <code><?php echo "XS_KEY_".$RUN['ID']."_ACCESS_TOKEN" ?></code> below in environment variables.<br>
-            <?php } ?>
-            <textarea style="width:100%"><?php echo($oauthClient->token());?></textarea>
+            Please set  <code><?php echo $keyname ?></code> below in environment variables.<br>
+            <textarea style="width:100%"><?php echo $newToken;?></textarea>
             Please renew your token again before <code><?php echo $oauthClient->expires();?></code><br/>
             <?php
             

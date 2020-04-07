@@ -106,9 +106,9 @@ class ctyunAuth implements authProvider{
     function getToken($code=""){
         if(empty($code))$code=$_GET['code'];
         $this->acctk=$this->sky->getAccessToken("code",$code);
-        if($this->prevToken&&$this->prevToken!=$this->token()){
-            throw new \Error("AccessToken Mismatch");
-        }
+        //if($this->prevToken&&$this->prevToken!=$this->token()){
+        //    throw new \Error("AccessToken Mismatch");
+        //}
     }
     function needRenew(){
         return true;
