@@ -8,6 +8,7 @@ use TC;
 use Flight;
 use Mimey\MimeTypes;
 use flight\net\Route;
+use xyToki\xyShare\DAV\Controller as DavController;
 use xyToki\xyShare\Errors\NotFound;
 use xyToki\xyShare\Errors\NotAuthorized;
 class Controller{
@@ -182,6 +183,18 @@ class Controller{
             <?php
             
         });
+    }
+    static function dav($base=""){
+        Flight::route($base."/-dav/*",function($route) use($base){global $RUN;
+            //初始化sdk
+            $RUN['BASE']=$RUN['app']['base'];
+            try{
+                $app=new Provider($RUN['provider'],$RUN);;
+            }catch(NotAuthorized $e){
+                return;
+            }
+            new DavController(TC::path(Flight::request()->base."/".$base."/-dav",false),$app);
+        },true);
     }
     static function disk($base=""){
         /* 主程序 */

@@ -28,6 +28,7 @@ function TC_add(){
         $bases[]=$base;
         Controller::prepare($app,$base);
         Controller::installer($base);
+        Controller::dav($base);
         Controller::disk($base);
     }
 
