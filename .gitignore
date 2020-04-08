@@ -1,7 +1,10 @@
 /vendor/
 /_app/vendor/
 /_app/views/toki
+/_app/views/.private
 .env
 .env.local
 .env.runtime
 Private*.php
+/_plugins/*
+-/_plugins/*.md
