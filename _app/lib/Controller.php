@@ -188,12 +188,18 @@ class Controller{
         Flight::route($base."/-dav/*",function($route) use($base){global $RUN;
             //初始化sdk
             $RUN['BASE']=$RUN['app']['base'];
-            try{
-                $app=new Provider($RUN['provider'],$RUN);;
-            }catch(NotAuthorized $e){
+            $enable = TC::get("dav");
+            $pass = TC::get("dav_auth");
+            if($enable==true){
+                try{
+                    $app=new Provider($RUN['provider'],$RUN);;
+                }catch(NotAuthorized $e){
+                    return;
+                }
+                new DavController(TC::path(Flight::request()->base."/".$base."/-dav",false),$app,$pass);
                 return;
             }
-            new DavController(TC::path(Flight::request()->base."/".$base."/-dav",false),$app);
+            return true;
         },true);
     }
     static function disk($base=""){
