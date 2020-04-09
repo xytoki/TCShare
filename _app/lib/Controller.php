@@ -5,6 +5,7 @@
  */
 namespace xyToki\xyShare;
 use TC;
+use Error;
 use Flight;
 use Mimey\MimeTypes;
 use flight\net\Route;
@@ -36,7 +37,7 @@ class Controller{
                 }
             }
             if(!$hasKey){
-                throw new Error("请正确配置Key");
+                throw new \Error("请正确配置Key");
             }
             $urlbase=Flight::request()->base;
             if($urlbase=="/")$urlbase="";
@@ -68,8 +69,8 @@ class Controller{
         return true;
     }
     static function rule($rule,$path,$fileInfo){
-        $thisType = $fileInfo->isFolder()?"folder":"file";
-        if(isset($rule['ignore'])){
+        if(isset($rule['ignore'])&&$fileInfo){
+        	$thisType = $fileInfo->isFolder()?"folder":"file";
             $ignores = explode(";",$rule['ignore']);
             if( in_array($thisType,$ignores) || 
                 ( !$fileInfo->isFolder()&&in_array($fileInfo->extension(),$ignores) )
@@ -157,7 +158,7 @@ class Controller{
                 && isset($RUN['ACCESS_TOKEN']) && !empty($RUN['ACCESS_TOKEN'])
                 && $RUN['ACCESS_TOKEN']!=$newToken
             ){
-                throw new \Error("AccessToken Mismatch");
+                throw new Error("AccessToken Mismatch");
             }
             $res=Config::write($keyname,$newToken);
             if( isset($RUN['ACCESS_TOKEN']) && $RUN['ACCESS_TOKEN']!="" ){
@@ -185,21 +186,55 @@ class Controller{
         });
     }
     static function dav($base=""){
-        Flight::route($base."/-dav/*",function($route) use($base){global $RUN;
-            //初始化sdk
+      	$initDav = function($base,$p,$pass=NULL){
+          	global $RUN;
             $RUN['BASE']=$RUN['app']['base'];
-            $enable = TC::get("dav");
-            $pass = TC::get("dav_auth");
-            if($enable==true){
-                try{
-                    $app=new Provider($RUN['provider'],$RUN);;
-                }catch(NotAuthorized $e){
-                    return;
-                }
-                new DavController(TC::path(Flight::request()->base."/".$base."/-dav",false),$app,$pass);
+            //初始化sdk
+        	try{
+                $app=new Provider($RUN['provider'],$RUN);;
+            }catch(NotAuthorized $e){
                 return;
             }
+            new DavController(TC::path(Flight::request()->base."/".$base.$p,false),$app,$pass);
+        };
+        Flight::route($base."/-dav/*",function($route) use($base,$initDav){
+            $enable = TC::get("dav");
+            $disable = TC::get("dav_standalone");
+            $pass = TC::get("dav_auth");
+            if($enable==true&&$disable!="false"){
+                return $initDav($base,"/-dav",$pass);
+            }
             return true;
+        },true);
+        Flight::route("$base/*",function($route) use($base,$initDav){
+          	$m = Flight::request()->method;
+            if(isset($_GET['_FORCE_METHOD'])){
+            	//配合Nginx Config，避免根目录405
+              	$m = strtoupper($_GET['_FORCE_METHOD']);
+              	$_SERVER['REQUEST_METHOD'] = $m;
+            }
+          	$davmethods=["PROPFIND","MKCOL","PUT","MOVE","COPY","LOCK","DELETE","PROPPATCH","UNLOCK"];
+          	$isDav = in_array($m,$davmethods);
+            $enable = TC::get("dav");
+            $disable = TC::get("dav_shared");
+            if(!$isDav){
+                return true;
+            }
+            if($enable!=true&&$disable!="false"){
+                return true;
+            }
+            //访问规则
+            global $TC;
+            $pass = TC::get("dav_auth");
+            if(!$pass||TC::get("dav_auth_only_standalone")){
+              	//无密码或仅加密独立模式，禁止访问加密文件
+                if(!Controller::rules($TC['Rules'],Flight::request()->url,false)){
+                    return;
+                }
+            	return $initDav($base,"",NULL);
+            }
+          	//否则，顺其自然吧
+          	return $initDav($base,"",$pass);
         },true);
     }
     static function disk($base=""){

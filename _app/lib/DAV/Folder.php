@@ -22,7 +22,19 @@ class Folder extends DAV\Collection {
         }
         return $res;
     }
+    function childExists($name){
+        return true;
+    }
     function getName() {
         return $this->current->name();
+    }
+    function getLastModified(){
+      	return strtotime($this->current->timeModified());
+    }
+    public function getQuotaInfo(){
+        return [
+            0,
+            1024*1024*1024
+        ];
     }
 }

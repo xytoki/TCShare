@@ -1,6 +1,7 @@
 <?php
 namespace xyToki\xyShare\DAV;
 use Sabre\DAV;
+use Mimey\MimeTypes;
 class File extends DAV\File {
     private $file;
     private $client;
@@ -29,5 +30,20 @@ class File extends DAV\File {
     }
     function getETag() {
         return '"' . $this->file->size() . '"';
+    }
+    function getLastModified(){
+      	return strtotime($this->file->timeModified());
+    }
+    function getContentType(){
+        $mimes = new MimeTypes;
+        $filemime=$mimes->getMimeType($this->file->extension());
+        if(!$filemime)$filemime = "application/octet-stream";
+        return $filemime;
+    }
+    public function getQuotaInfo(){
+        return [
+            0,
+            1024*1024*1024
+        ];
     }
 }
