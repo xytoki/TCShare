@@ -161,6 +161,10 @@ XS_APP_<id>_DAV_AUTH_ONLY_STANDALONE=true
 #### Nginx配置问题
 若使用WebDAV时Nginx报`405 Method Not Allowed`错误，请在Rewrite规则里增加如下：
 ```nginx
+set $sep "?";
+if ( $is_args = "?" ){
+    set $sep "&";
+}
 error_page  405 =200 $uri${sep}_FORCE_METHOD=$request_method;
 ```
 ### 配置缓存  
