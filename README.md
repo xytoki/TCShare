@@ -117,6 +117,7 @@ XS_APP_<id>=/caiyun
  - Token鉴权
  - 服务器直接输出（1M以下，`?TC_direct`）
  - header,readme
+ - WebDav
 
 #### TODO
  - 更多文件类型的预览
@@ -142,6 +143,25 @@ try_files $uri $uri/ /index.php$is_args$args;
 location ~ /\.env {
     deny all;
 }
+```
+### WebDav  
+TCShare现已支持只读的WebDav，但需要在配置文件里手动启用：
+```shell
+XS_APP_<id>_DAV=true
+```
+之后即可通过`https://tcshare/`或者`https://tcshare/-dav`使用WebDAV了。
+若需访问加密文件夹，请设置WebDAV独立密码：
+```shell
+XS_APP_<id>_DAV_AUTH=username:password
+```
+你还可以设置如下参数，这样`https://tcshare/`将无密码且无法访问加密文件夹，`https://tcshare/-dav`将有密码且可以访问加密文件夹。
+```shell
+XS_APP_<id>_DAV_AUTH_ONLY_STANDALONE=true
+```
+#### Nginx配置问题
+若使用WebDAV时Nginx报`405 Method Not Allowed`错误，请在Rewrite规则里增加如下：
+```nginx
+error_page  405 =200 $uri${sep}_FORCE_METHOD=$request_method;
 ```
 ### 配置缓存  
 默认情况下，TCShare将使用文件缓存数据，您可以设置如下配置而是用memcache或Redis：
