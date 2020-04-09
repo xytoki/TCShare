@@ -125,7 +125,7 @@ XS_APP_<id>=/caiyun
 ### Rewrite规则：
 
 Apache：
-```
+```ApacheConf
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-f
@@ -138,7 +138,7 @@ Apache：
 </FilesMatch>
 ```
 Nginx:
-```
+```nginx
 try_files $uri $uri/ /index.php$is_args$args;
 location ~ /\.env {
     deny all;
