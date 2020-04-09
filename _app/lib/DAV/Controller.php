@@ -9,7 +9,7 @@ class Controller{
         $server->setBaseUri($path);
         $server->addPlugin(new DAV\Browser\Plugin());
         if(!empty($pass)){
-            $authBackend = new \Sabre\DAV\Auth\Backend\BasicCallback(function($username, $password) use($pass) {
+            $authBackend = new DAV\Auth\Backend\BasicCallBack(function($username, $password) use($pass) {
                 return "$username:$password"==$pass;
             });
             $authBackend->setRealm('TCShare WebDAV');
